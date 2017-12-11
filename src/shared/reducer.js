@@ -6,9 +6,9 @@ export default function (state, action) {
         case LOGIN_SUCCESS: {
             return {
                 mail:action.payload.email,
-                picture:action.payload.photoURL,
-                name:action.payload.displayName,
-                id:action.payload.uid
+                picture:action.payload.picture,
+                name:action.payload.name,
+                id:action.payload.user_id
             } ;
         }
         case LOGOUT: {

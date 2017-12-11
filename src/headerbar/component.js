@@ -8,8 +8,13 @@ import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
 import AccountMenu from './accountMenu';
+import { LoginAction , FetchUserInfo } from '../shared';
 
 class Header extends Component {
+    componentDidMount(){
+        this.props.FetchUserInfo();
+    }
+
     render() {
         return (
             <AppBar position="static">
@@ -21,10 +26,8 @@ class Header extends Component {
                         Mett App
                         </Typography>
                     {
-                        !this.props.profile &&  (
-                            <Link to={'login'} >
-                                <Button color="contrast" >Login</Button>
-                            </Link>
+                        !this.props.profile && (
+                            <Button color="contrast" onClick={this.props.LoginAction} >Login</Button>
                         )
                     }
                     {
@@ -50,4 +53,4 @@ function mapStateToProps(props) {
     }
 }
 
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps, { LoginAction, FetchUserInfo })(Header);

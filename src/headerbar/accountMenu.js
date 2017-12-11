@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Button from 'material-ui/Button';
 import Menu, { MenuItem } from 'material-ui/Menu';
 import AccountCircle from 'material-ui-icons/AccountCircle'
-import firebase from '../shared/firebase';
 
 class AccountMenu extends Component {
     state = {
@@ -16,7 +15,6 @@ class AccountMenu extends Component {
 
     handleLogout = () => {
         this.handleRequestClose();
-        firebase.auth().signOut();
     }
 
     handleRequestClose = () => {

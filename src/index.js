@@ -10,15 +10,11 @@ import { Grid } from 'material-ui';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { HeaderComponent } from './headerbar';
 import appRoutes from './appRoutes';
-import authWatcher from './authentication/authWatcher';
-import { AppointmentList } from './appointment';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(appReducer, /* preloadedState, */ composeEnhancers(
   applyMiddleware(thunkMiddleware, promise, logger)
 ));
-
-authWatcher(store);
 
 ReactDOM.render(
   <Provider store={store}>
