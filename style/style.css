@@ -1,0 +1,28 @@
+.root {
+    flex-grow: 1;
+    margin-top: 30
+}
+.header_menuButton {
+    margin-left: -12;
+    margin-right: 20;
+}
+.flex1 {
+    flex: 1;
+}
+.main_content{
+    min-height: 400px;
+    max-height: max-content
+}
+
+.margin0{
+    margin: 0
+}
+
+.fab {
+    margin: 0px;
+    top: auto;
+    right: 20px;
+    bottom: 20px;
+    left: auto;
+    position: fixed;
+};
