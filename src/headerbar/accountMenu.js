@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Button from 'material-ui/Button';
 import Menu, { MenuItem } from 'material-ui/Menu';
+import Avatar from 'material-ui/Avatar';
 import AccountCircle from 'material-ui-icons/AccountCircle'
 
 class AccountMenu extends Component {
@@ -29,7 +30,7 @@ class AccountMenu extends Component {
                     aria-haspopup="true"
                     onClick={this.handleClick}
                 >
-                    <AccountCircle />
+                    <Avatar src={ this.props.imageUrl  }></Avatar>
                 </Button>
                 <Menu
                     id="simple-menu"

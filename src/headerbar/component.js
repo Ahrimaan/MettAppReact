@@ -32,7 +32,7 @@ class Header extends Component {
                     }
                     {
                         this.props.profile && (
-                            <AccountMenu />
+                            <AccountMenu imageUrl={ this.props.profile.picture }/>
                         )
                     }
 
