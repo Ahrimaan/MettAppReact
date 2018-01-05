@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Button from 'material-ui/Button';
-import AddIcon from 'material-ui-icons/Add';
 import { addApointment } from '../actions';
+import { Button } from 'semantic-ui-react';
 
 class AppointmentList extends Component {
     componentDidMount() {
@@ -11,9 +10,7 @@ class AppointmentList extends Component {
 
     render() {
         return (
-            <Button className="fab" color="primary" aria-label="add" onClick={this.handleAddButtonClick}>
-                <AddIcon />
-            </Button>
+            <Button circular icon='add' floated='right'></Button>
         );
     }
 

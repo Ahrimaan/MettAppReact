@@ -1,9 +1,9 @@
-import reducer from './reducer';
-import { showLogin, fetchProfile } from './actions';
+import appStateReducer from './appStateReducer';
+import { HIDE_TENANT_DIALOG,SHOW_TENANT_DIALOG } from './actionTypes';
 
 export {
-    reducer as AuthReducer,
-    showLogin as LoginAction,
-    fetchProfile as FetchUserInfo
+    appStateReducer as AppStateReducer,
+    HIDE_TENANT_DIALOG,
+    SHOW_TENANT_DIALOG
 }
  

@@ -1,0 +1,6 @@
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
+export const LOGIN_WITH_GOOGLE = 'LOGIN_WITH_GOOGLE';
+export const LOGIN_FAILURE = 'LOGIN_FAILURE'
+export const LOGIN_PROCCESING = 'LOGIN_PROCCESING'
+export const CURRENT_USER = 'CURRENT_USER';
+export const LOGOUT = 'LOGOUT';

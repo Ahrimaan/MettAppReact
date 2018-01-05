@@ -3,9 +3,7 @@ import { Route } from 'react-router-dom';
 import component from './appointment-list/component';
 
 const appointmentRoutes = (
-    <Route>
-        <Route path="/home" component={component} />
-    </Route>
+    <Route path="/home" component={component} />
 )
 
 export default appointmentRoutes;

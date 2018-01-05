@@ -5,11 +5,16 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import promise from 'redux-promise';
 import logger from 'redux-logger'
-import appReducer from './appReducer';
-import { Grid } from 'material-ui';
+import { Container } from 'semantic-ui-react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+
+// Import Components
 import { HeaderComponent } from './headerbar';
+import { TenantComponent } from './tenant';
+
 import appRoutes from './appRoutes';
+import appReducer from './appReducer';
+
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(appReducer, /* preloadedState, */ composeEnhancers(
@@ -19,14 +24,13 @@ const store = createStore(appReducer, /* preloadedState, */ composeEnhancers(
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
-      <Grid container className="root">
-        <Grid item="true" xs={12} >
-          <HeaderComponent />
-        </Grid>
+      <Container >
+         <HeaderComponent />
+         <TenantComponent/>
         <Switch children={appRoutes}>
 
         </Switch>
-      </Grid>
+      </Container>
     </BrowserRouter>
   </Provider>
   , document.querySelector('.application'));

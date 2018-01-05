@@ -1,56 +1,62 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import AppBar from 'material-ui/AppBar';
-import Toolbar from 'material-ui/Toolbar';
-import Typography from 'material-ui/Typography';
-import Button from 'material-ui/Button';
-import IconButton from 'material-ui/IconButton';
-import MenuIcon from 'material-ui-icons/Menu';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {Link} from 'react-router-dom';
 import AccountMenu from './accountMenu';
-import { LoginAction , FetchUserInfo } from '../shared';
+import {ShowLoginAction,FetchProfileAction, LogoutAction} from '../authentication';
+import {Input, Menu, Header} from 'semantic-ui-react'
 
-class Header extends Component {
-    componentDidMount(){
-        this.props.FetchUserInfo();
+class HeaderComponent extends Component {
+    componentDidMount() {
+        this
+            .props
+            .FetchProfileAction();
     }
+
+    state = {
+        activeItem: 'home'
+    }
+
+    handleLoginClick = (e) => this
+        .props
+        .ShowLoginAction();
+
+    handleLogoutClick = (e) => this
+        .props
+        .LogoutAction();
 
     render() {
+        const {activeItem} = this.state
         return (
-            <AppBar position="static">
-                <Toolbar>
-                    <IconButton className="header_menuButton" color="contrast" aria-label="Menu">
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography type="title" color="inherit" className="flex1">
-                        Mett App
-                        </Typography>
-                    {
-                        !this.props.profile && (
-                            <Button color="contrast" onClick={this.props.LoginAction} >Login</Button>
-                        )
-                    }
-                    {
-                        this.props.profile && (
-                            <AccountMenu imageUrl={ this.props.profile.picture }/>
-                        )
-                    }
+            <Menu>
+                <Menu.Item
+                    position='left'
+                    as={Link}
+                    to='/'
+                    name='home'
+                    active={activeItem === 'home'}
+                    onClick={this.handleItemClick}/>
+                <Header as='h3'>Mett App</Header>
+                <Menu.Menu position='right'>
 
-                </Toolbar>
-            </AppBar>
+                    {this.props.auth && (
+                        <Menu.Item >
+                            <AccountMenu imageUrl={this.props.auth.picture}/>
+                        </Menu.Item>
+                    )}
+
+                    {!this.props.auth && (<Menu.Item name='login' onClick={this.handleLoginClick}/>)
+}
+                    {this.props.auth && (<Menu.Item name='logout' onClick={this.handleLogoutClick}/>)
+}
+
+                </Menu.Menu>
+            </Menu>
         );
-    }
-
-    renderProfileSection() {
-        console.log(this.props);
-
     }
 }
 
 function mapStateToProps(props) {
-    return {
-        profile: props.profile
-    }
+    return {auth: props.auth}
 }
 
-export default connect(mapStateToProps, { LoginAction, FetchUserInfo })(Header);
+export default connect(mapStateToProps, {ShowLoginAction, FetchProfileAction, LogoutAction})(HeaderComponent);
