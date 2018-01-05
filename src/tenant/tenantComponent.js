@@ -5,9 +5,11 @@ import {hideTenantDialog} from './actions';
 import _ from 'lodash';
 
 class TenantComponent extends Component {
-    state = {loading:false};
+    state = {
+        loading: false
+    };
 
-    handleChange(event ,{ value}) {
+    handleChange(event, {value}) {
         this.setState({selectedItem: value});
     };
 
@@ -15,8 +17,8 @@ class TenantComponent extends Component {
         return this.renderModal();
     }
 
-    handleSave(){
-        this.setState({loading:true});
+    handleSave() {
+        this.setState({loading: true});
     }
 
     renderSelectList() {
@@ -25,9 +27,14 @@ class TenantComponent extends Component {
         tenantList.forEach(tenant => {
             items.push({value: tenant.id, text: tenant.tenantName})
         });
-        return <Dropdown fluid selection
-         onChange={this.handleChange = this.handleChange.bind(this)}
-         placeholder="Bitte wähle eine Abteilung" options={items}></Dropdown>;
+        return <Dropdown
+            fluid
+            selection
+            onChange={this.handleChange = this
+            .handleChange
+            .bind(this)}
+            placeholder="Bitte wähle eine Abteilung"
+            options={items}/>;
     }
 
     renderModal() {
@@ -44,18 +51,23 @@ class TenantComponent extends Component {
                 </Modal.Header>
                 <Modal.Content>
                     {tenantList && (this.renderSelectList())}
-                    {!tenantList && (<div> <Button disabled loading primary>Loading</Button> </div>)}
+                    {!tenantList && (
+                        <div>
+                            <Button disabled loading primary>Loading</Button>
+                        </div>
+                    )}
                 </Modal.Content>
                 <Modal.Actions>
-                    <Button 
+                    <Button
                         loading={this.state.loading}
                         disabled={this.state.loading || !this.state.selectedItem}
-                        positive 
+                        positive
                         icon='checkmark'
                         labelPosition='right'
                         content='Save'
-                        onClick={this.handleSave = this.handleSave.bind(this)}
-                        />
+                        onClick={this.handleSave = this
+                        .handleSave
+                        .bind(this)}/>
                 </Modal.Actions>
             </Modal>
         );
