@@ -1,69 +1,69 @@
 import React, {Component} from 'react';
-import { connect } from 'react-redux';
-import { getTentants } from './tenantService';
-import { Button, Modal } from 'semantic-ui-react'
+import {connect} from 'react-redux';
+import {Button, Modal, Dropdown} from 'semantic-ui-react'
+import {hideTenantDialog} from './actions';
 import _ from 'lodash';
 
 class TenantComponent extends Component {
-    state = { open: false }
+    state = {loading:false};
 
-    componentWillMount() {
-        if(this.props.appState.showDialog){
-            getTentants().then(result => {
-                let tentants = result.data;
-                this.setState({
-                    tenants: tentants,
-                    open: false,
-                    item: _.first(tentants)
-                })
-            })
-        }     
-
-    }
-
-    handleChange(event) {
-        this.setState({item: event.target.value});
+    handleChange(event ,{ value}) {
+        this.setState({selectedItem: value});
     };
-
-    handleClose(event) {
-        // Save the Tenant Change the Route
-    }
-
-    handleOpen() {
-        this.setState({open: true})
-    }
 
     render() {
         return this.renderModal();
+    }
 
+    handleSave(){
+        this.setState({loading:true});
+    }
+
+    renderSelectList() {
+        const {tenantList} = this.props.tenant;
+        const items = [];
+        tenantList.forEach(tenant => {
+            items.push({value: tenant.id, text: tenant.tenantName})
+        });
+        return <Dropdown fluid selection
+         onChange={this.handleChange = this.handleChange.bind(this)}
+         placeholder="Bitte wähle eine Abteilung" options={items}></Dropdown>;
     }
 
     renderModal() {
-        const { showDialog } = this.props.appState;
+        const {showDialog, tenantList} = this.props.tenant;
 
         return (
-            <Modal size='mini' open={showDialog} onClose={this.handleClose}>
+            <Modal
+                closeOnDimmerClick={false}
+                closeOnDocumentClick={false}
+                size='mini'
+                open={showDialog}>
                 <Modal.Header>
-                    Delete Your Account
+                    Zuordnung wählen
                 </Modal.Header>
                 <Modal.Content>
-                    <p>Are you sure you want to delete your account</p>
+                    {tenantList && (this.renderSelectList())}
+                    {!tenantList && (<div> <Button disabled loading primary>Loading</Button> </div>)}
                 </Modal.Content>
                 <Modal.Actions>
-                    <Button negative>
-                        No
-                    </Button>
-                    <Button positive icon='checkmark' labelPosition='right' content='Yes'/>
+                    <Button 
+                        loading={this.state.loading}
+                        disabled={this.state.loading || !this.state.selectedItem}
+                        positive 
+                        icon='checkmark'
+                        labelPosition='right'
+                        content='Save'
+                        onClick={this.handleSave = this.handleSave.bind(this)}
+                        />
                 </Modal.Actions>
             </Modal>
         );
     }
 }
 
-function mapStateToProps(props){
-    return {
-        appState: props.appState
-    }
+function mapStateToProps(props) {
+    return {tenant: props.tenant}
 }
 
-export default connect(mapStateToProps)(TenantComponent);
+export default connect(mapStateToProps, {hideTenantDialog})(TenantComponent);

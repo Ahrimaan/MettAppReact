@@ -8,8 +8,8 @@ const getTentants = () => {
             return resolve({
                 "data":[
                     {
-                        "id": 0,
-                        "tenantName": "ih-iaff"
+                        "id": 1,
+                        "tenantName": "IH-IAFF"
                     }
                 ]
             })

@@ -1,5 +1,5 @@
 import { CURRENT_USER, LOGIN_FAILURE, LOGIN_SUCCESS, LOGIN_WITH_GOOGLE, LOGOUT, LOGIN_PROCCESING } from './actionTypes';
-import { HIDE_TENANT_DIALOG, SHOW_TENANT_DIALOG } from '../shared';
+import { showTenantDialog } from '../tenant';
 import { getCurrentProfile, login, logout } from './authenticationService';
 
 export function showLogin() {
@@ -7,7 +7,7 @@ export function showLogin() {
         dispatch({ type: LOGIN_PROCCESING });
         login().then(result => {
             if(!result.user.tenant){
-                dispatch({type:SHOW_TENANT_DIALOG});
+                dispatch(showTenantDialog());
             }
             dispatch({type:LOGIN_SUCCESS, payload:result.user});
         }).catch(err => {
@@ -20,7 +20,7 @@ export function fetchProfile() {
     return (dispatch) => {
         let profile = getCurrentProfile();
         if(!profile.tenant){
-            dispatch({type:SHOW_TENANT_DIALOG});
+            dispatch(showTenantDialog());
         }
         dispatch({type:CURRENT_USER, payload: profile});
     }
