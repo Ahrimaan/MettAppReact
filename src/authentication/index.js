@@ -1,5 +1,5 @@
 import authReducer from './authReducer';
-import { showLogin, fetchProfile, logoutCurrentUser } from './authActions';
+import { showLogin, fetchProfile, logoutCurrentUser, updateUserInformation } from './authActions';
 import { getBearerToken  } from './bearerToken';
 
 export {
@@ -7,5 +7,6 @@ export {
     showLogin as ShowLoginAction,
     fetchProfile as FetchProfileAction,
     logoutCurrentUser as LogoutAction,
-    getBearerToken as GetAuthenticationHeaderToken
+    getBearerToken as GetAuthenticationHeaderToken,
+    updateUserInformation
 }

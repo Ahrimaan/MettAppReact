@@ -4,22 +4,43 @@ import {
     LOGIN_SUCCESS,
     LOGIN_WITH_GOOGLE,
     LOGOUT,
-    LOGIN_PROCCESING
+    LOGIN_PROCCESING,
+    USERINFORMATION_UPDATED,
+    USERINFORMATION_UPDATED_FAILED,
+    USERINFORMATION_UPDATING
 } from './actionTypes';
-import {showTenantDialog} from '../tenant';
-import {getCurrentProfile, login, logout} from './authenticationService';
+import { showTenantDialog, hideTenantDialog } from '../tenant';
+import { getCurrentProfile, login, logout, updateUser } from './authenticationService';
+import { HIDE_TENANT_DIALOG } from '../tenant/actionTypes';
 
 export function showLogin() {
     return (dispatch) => {
-        dispatch({type: LOGIN_PROCCESING});
+        dispatch({ type: LOGIN_PROCCESING });
         login().then(result => {
             if (!result.user.tenant) {
                 dispatch(showTenantDialog());
             }
-            dispatch({type: LOGIN_SUCCESS, payload: result.user});
+            dispatch({ type: LOGIN_SUCCESS, payload: result.user });
         }).catch(err => {
-            dispatch({type: LOGIN_FAILURE, payload: err});
+            dispatch({ type: LOGIN_FAILURE, payload: err });
         })
+    }
+}
+
+export function updateUserInformation(tenantId) {
+    return (dispatch) => {
+        dispatch({type:USERINFORMATION_UPDATING})
+        let action = updateUser(tenantId).then(result => {
+            dispatch({
+                type:USERINFORMATION_UPDATED,
+                payload:result
+            });
+            dispatch({type:HIDE_TENANT_DIALOG})
+        }).catch(err => {
+            // globalerror
+            dispatch({type:USERINFORMATION_UPDATED_FAILED});
+        })
+        dispatch(action);
     }
 }
 
@@ -30,7 +51,7 @@ export function fetchProfile() {
             if (!profile.tenant) {
                 dispatch(showTenantDialog());
             }
-            dispatch({type: CURRENT_USER, payload: profile});
+            dispatch({ type: CURRENT_USER, payload: profile });
         }
 
     }
@@ -39,6 +60,6 @@ export function fetchProfile() {
 export function logoutCurrentUser() {
     return (dispatch) => {
         logout();
-        dispatch({type: LOGOUT})
+        dispatch({ type: LOGOUT })
     }
 }

@@ -1,4 +1,6 @@
-import userService from './userService';
+import config from '../config';
+import axios from 'axios';
+import { getBearerToken } from './bearerToken';
 
 const options = {
     auth: {
@@ -31,14 +33,16 @@ export function login() {
                     // Handle error
                     return reject(error);
                 }
-                let userInfo = getUserInformation(profile.sub, tokenInfo.idToken);
-
-                let user = fetchUserProfile(profile, userInfo);
-                localStorage.setItem(AUTH_INFO_KEY, JSON.stringify(tokenInfo));
-                localStorage.setItem(PROFILE_KEY, JSON.stringify(user));
-                lock.hide();
-                return resolve({user, tokenInfo});
-
+                getUserInformation(profile.sub, tokenInfo.idToken).then(result => {
+                    let userInfo = result.data;
+                    let user = Object.assign({}, profile, userInfo );
+                    localStorage.setItem(AUTH_INFO_KEY, JSON.stringify(tokenInfo));
+                    setCurrentProfile(user);
+                    lock.hide();
+                    return resolve({ user, tokenInfo });
+                }).catch(err => {
+                    console.error(err);
+                });
             });
         });
     });
@@ -46,9 +50,8 @@ export function login() {
 
 export function fetchUserProfile(userProfile, userInfo) {
     if (userInfo) {
-        let user = userInfo.data;
-        userProfile.admin = user.isAdmin;
-        userProfile.tenant = user.tenantId;
+        userProfile.admin = userInfo.isAdmin;
+        userProfile.tenant = userInfo.tenantId;
     }
     return userProfile;
 }
@@ -69,14 +72,59 @@ export function logout() {
     localStorage.clear();
 }
 
+export function updateUser(tentantId) {
+    return new Promise((resolve, reject) => {
+        if (config.IsMock) {
+            return resolve({
+                tenant: tentantId,
+                userId: getUserId()
+            });
+        };
+        axios.post(config.UserInfoUrl, { tenantId: tentantId }, {
+            headers: {
+                'Authorization': getBearerToken()
+            }
+        }).then(result => {
+            updateStorageUser({ tenant: tentantId});
+            resolve(result.data);
+        }).catch(err => {
+            console.error(err);
+            return reject(err);
+        })
+    });
+}
+
 function getUserInformation(userId, idToken) {
     let splittedUserId = userId.split('|')[1];
-    userService.getUserInformation(splittedUserId, idToken).then(result => {
-        return result.data;
-    }).catch(err => {
-        throw err;
+    console.log([userId, idToken, config.IsMock, config.UserInfoUrl, getBearerToken(idToken)]);
+    if (config.IsMock) {
+        return {
+            "userId": "104452206825748984601",
+            "tenantId": "1",
+            "isAdmin": "false"
+        };
+    }
+    return axios.get(`${config.UserInfoUrl}/${splittedUserId}`, {
+        headers: {
+            'Authorization': getBearerToken(idToken)
+        }
     });
-    
+}
+
+function getUserId() {
+    let curProfile = getCurrentProfile();
+    let userIdLong = curProfile.sub;
+    return userIdLong.split('|')[1];
+}
+
+function setCurrentProfile(profile) {
+    localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+}
+
+function updateStorageUser(information) {
+    let curProfile = getCurrentProfile();
+    let newProfile = Object.assign({}, curProfile, information);
+    setCurrentProfile(newProfile);
 }
 
 function isExpired() {

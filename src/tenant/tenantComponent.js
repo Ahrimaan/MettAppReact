@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Button, Modal, Dropdown} from 'semantic-ui-react'
-import {hideTenantDialog} from './actions';
+import { updateUserInformation } from '../authentication';
 import _ from 'lodash';
 
 class TenantComponent extends Component {
@@ -18,7 +18,7 @@ class TenantComponent extends Component {
     }
 
     handleSave() {
-        this.setState({loading: true});
+        this.props.updateUserInfo(this.state.selectedItem);
     }
 
     renderSelectList() {
@@ -59,8 +59,8 @@ class TenantComponent extends Component {
                 </Modal.Content>
                 <Modal.Actions>
                     <Button
-                        loading={this.state.loading}
-                        disabled={this.state.loading || !this.state.selectedItem}
+                        loading={this.props.auth.loading}
+                        disabled={this.props.auth.loading || !this.state.selectedItem}
                         positive
                         icon='checkmark'
                         labelPosition='right'
@@ -74,8 +74,16 @@ class TenantComponent extends Component {
     }
 }
 
+const mapDispatchToProps = dispatch => {
+    return {
+      updateUserInfo: id => {
+        dispatch(updateUserInformation(id))
+      }
+    }
+  }
+
 function mapStateToProps(props) {
-    return {tenant: props.tenant}
+    return {tenant: props.tenant, auth: props.auth}
 }
 
-export default connect(mapStateToProps, {hideTenantDialog})(TenantComponent);
+export default connect(mapStateToProps, mapDispatchToProps)(TenantComponent);
