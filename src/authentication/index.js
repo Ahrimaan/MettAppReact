@@ -1,6 +1,6 @@
 import authReducer from './authReducer';
 import { showLogin, fetchProfile, logoutCurrentUser } from './authActions';
-import { getBearerToken } from './authenticationService';
+import { getBearerToken  } from './bearerToken';
 
 export {
     authReducer as AuthReducer,
