@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Image } from 'semantic-ui-react';
+import { Image, Popup } from 'semantic-ui-react';
 
 class AccountMenu extends Component {
     state = {
-        anchorEl: null,
         open: false,
     };
 
@@ -20,9 +19,15 @@ class AccountMenu extends Component {
     };
 
     render() {
+        const { imageUrl , username } = this.props;
         return (
             <div>
-                <Image avatar src={ this.props.imageUrl }/>
+                <Popup size={ 'mini' } trigger={ <Image avatar src={ imageUrl }/> }>
+                    <Popup.Content>
+                        { username }
+                    </Popup.Content>
+                 </Popup>
+                
             </div>
         );
     }

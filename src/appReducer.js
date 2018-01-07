@@ -8,7 +8,6 @@ const rootReducer = combineReducers({
   auth: AuthReducer,
   appointment: AppointmentReducer,
   tenant:TenantReducer
-  //appState:AppStateReducer
 });
 
 export default rootReducer;

@@ -35,7 +35,7 @@ export function login() {
                 }
                 getUserInformation(profile.sub, tokenInfo.idToken).then(result => {
                     let userInfo = result.data;
-                    let user = Object.assign({}, profile, userInfo );
+                    let user = Object.assign({}, profile, userInfo);
                     localStorage.setItem(AUTH_INFO_KEY, JSON.stringify(tokenInfo));
                     setCurrentProfile(user);
                     lock.hide();
@@ -73,20 +73,24 @@ export function logout() {
 }
 
 export function updateUser(tentantId) {
+    let currentProfile = getCurrentProfile();
+
     return new Promise((resolve, reject) => {
+        let item = {
+            tenantId: tentantId,
+            mail: currentProfile.email, 
+            username: currentProfile.name
+        }
         if (config.IsMock) {
-            return resolve({
-                tenant: tentantId,
-                userId: getUserId()
-            });
+            return resolve(item);
         };
-        axios.post(config.UserInfoUrl, { tenantId: tentantId }, {
+        axios.post(config.UserInfoUrl, item, {
             headers: {
                 'Authorization': getBearerToken()
             }
         }).then(result => {
-            updateStorageUser({ tenant: tentantId});
-            resolve(result.data);
+            updateStorageUser({ tenant: tentantId });
+            resolve({ tenant: tentantId });
         }).catch(err => {
             console.error(err);
             return reject(err);

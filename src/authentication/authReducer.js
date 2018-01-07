@@ -3,7 +3,7 @@ import {
     USERINFORMATION_UPDATED, LOGIN_PROCCESING, USERINFORMATION_UPDATING, USERINFORMATION_UPDATED_FAILED
 } from './actionTypes';
 
-const initialState = {loading: false};
+const initialState = null;
 
 export default function (state = initialState, action) {
     switch (action.type) {
@@ -20,13 +20,15 @@ export default function (state = initialState, action) {
             return state;
         }
         case USERINFORMATION_UPDATED: {
-            return Object.assign({}, state, action.payload);
+            //BUG
+            //not reasigning until it is not possible to get the last state :(
+            //return Object.assign({}, state, action.payload);
         }
         case USERINFORMATION_UPDATING:{
-            return Object.assign({}, state, {loading: true});
+            
         }
         case USERINFORMATION_UPDATED_FAILED: {
-            return Object.assign({}, state, {loading: false});
+            
         }
         case LOGOUT: {
             return null;

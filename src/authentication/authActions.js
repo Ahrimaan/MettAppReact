@@ -31,11 +31,14 @@ export function updateUserInformation(tenantId) {
     return (dispatch) => {
         dispatch({type:USERINFORMATION_UPDATING})
         let action = updateUser(tenantId).then(result => {
-            dispatch({
+            /* dispatch({
                 type:USERINFORMATION_UPDATED,
                 payload:result
-            });
+            }); */
+            // Find a better way, the component itself should track if a tenant switch is needed
             dispatch({type:HIDE_TENANT_DIALOG})
+            let profile = getCurrentProfile();
+            dispatch({type:CURRENT_USER, payload: profile});
         }).catch(err => {
             // globalerror
             dispatch({type:USERINFORMATION_UPDATED_FAILED});

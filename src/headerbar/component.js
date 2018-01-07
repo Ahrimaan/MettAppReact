@@ -40,7 +40,7 @@ class HeaderComponent extends Component {
 
                     {this.props.auth && (
                         <Menu.Item >
-                            <AccountMenu imageUrl={this.props.auth.picture}/>
+                            <AccountMenu username={ this.props.auth.name } imageUrl={this.props.auth.picture}/>
                         </Menu.Item>
                     )}
 

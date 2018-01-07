@@ -59,8 +59,8 @@ class TenantComponent extends Component {
                 </Modal.Content>
                 <Modal.Actions>
                     <Button
-                        loading={this.props.auth.loading}
-                        disabled={this.props.auth.loading || !this.state.selectedItem}
+                        loading={false} //change this to global loader if developed
+                        disabled={ !this.state.selectedItem}
                         positive
                         icon='checkmark'
                         labelPosition='right'
@@ -83,7 +83,7 @@ const mapDispatchToProps = dispatch => {
   }
 
 function mapStateToProps(props) {
-    return {tenant: props.tenant, auth: props.auth}
+    return {tenant: props.tenant}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TenantComponent);
