@@ -1,8 +1,6 @@
 import { Route } from 'react-router-dom';
 import { AppointmentRoutes } from './appointment';
 
-const routes = [
+export default [
     AppointmentRoutes
 ];
-
-export default routes;

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Button, Modal, Dropdown} from 'semantic-ui-react'
-import { updateUserInformation } from '../authentication';
+import { updateUserInformation } from '../shared';
 import _ from 'lodash';
 
 class TenantComponent extends Component {

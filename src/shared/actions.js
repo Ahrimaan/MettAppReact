@@ -66,3 +66,11 @@ export function logoutCurrentUser() {
         dispatch({ type: LOGOUT })
     }
 }
+
+export function showLoading(){
+    console.log('SHOW LOADING');
+}
+
+export function hideLoading() {
+    console.log('HIDE LOADING');
+}

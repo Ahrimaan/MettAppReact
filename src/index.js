@@ -10,7 +10,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 // Import Components
 import { HeaderComponent } from './headerbar';
-import { TenantComponent } from './tenant';
+import { TenantDialogComponent } from './tenant';
 
 import appRoutes from './appRoutes';
 import appReducer from './appReducer';
@@ -26,7 +26,7 @@ ReactDOM.render(
     <BrowserRouter>
       <Container >
          <HeaderComponent />
-         <TenantComponent/>
+         <TenantDialogComponent/>
         <Switch children={appRoutes}>
 
         </Switch>

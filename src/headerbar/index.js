@@ -1,5 +1,1 @@
-import HeaderComponent from './component';
-
-export {
-    HeaderComponent
-}
+export { default as HeaderComponent } from './component';

@@ -2,14 +2,14 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router-dom';
 import AccountMenu from './accountMenu';
-import {ShowLoginAction,FetchProfileAction, LogoutAction} from '../authentication';
+import { showLogin, fetchProfile, logoutCurrentUser } from '../shared';
 import {Input, Menu, Header} from 'semantic-ui-react'
 
 class HeaderComponent extends Component {
     componentDidMount() {
         this
             .props
-            .FetchProfileAction();
+            .fetchProfile();
     }
 
     state = {
@@ -18,11 +18,11 @@ class HeaderComponent extends Component {
 
     handleLoginClick = (e) => this
         .props
-        .ShowLoginAction();
+        .showLogin();
 
     handleLogoutClick = (e) => this
         .props
-        .LogoutAction();
+        .logoutCurrentUser();
 
     render() {
         const {activeItem} = this.state
@@ -38,15 +38,15 @@ class HeaderComponent extends Component {
                 <Header as='h3'>Mett App</Header>
                 <Menu.Menu position='right'>
 
-                    {this.props.auth && (
+                    {this.props.app.user && (
                         <Menu.Item >
-                            <AccountMenu username={ this.props.auth.name } imageUrl={this.props.auth.picture}/>
+                            <AccountMenu username={ this.props.app.user.name } imageUrl={this.props.app.user.picture}/>
                         </Menu.Item>
                     )}
 
-                    {!this.props.auth && (<Menu.Item name='login' onClick={this.handleLoginClick}/>)
+                    {!this.props.app.user && (<Menu.Item name='login' onClick={this.handleLoginClick}/>)
 }
-                    {this.props.auth && (<Menu.Item name='logout' onClick={this.handleLogoutClick}/>)
+                    {this.props.app.user && (<Menu.Item name='logout' onClick={this.handleLogoutClick}/>)
 }
 
                 </Menu.Menu>
@@ -56,7 +56,7 @@ class HeaderComponent extends Component {
 }
 
 function mapStateToProps(props) {
-    return {auth: props.auth}
+    return {app: props.app}
 }
 
-export default connect(mapStateToProps, {ShowLoginAction, FetchProfileAction, LogoutAction})(HeaderComponent);
+export default connect(mapStateToProps, { showLogin, fetchProfile, logoutCurrentUser})(HeaderComponent);

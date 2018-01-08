@@ -1,9 +1,3 @@
-import appList from './appointment-list/component';
-import reducer from './reducer';
-import routes from './routes';
-
-export {
-    appList as AppointmentList,
-    reducer as AppointmentReducer,
-    routes as AppointmentRoutes
-};
+export { default as AppointmentList } from './appointment-list/component';
+export { default as AppointmentReducer } from './reducer';
+export { default as AppointmentRoutes } from './routes';

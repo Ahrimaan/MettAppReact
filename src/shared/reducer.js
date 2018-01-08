@@ -1,34 +1,38 @@
 import {
     LOGIN_SUCCESS, CURRENT_USER, LOGOUT,
-    USERINFORMATION_UPDATED, LOGIN_PROCCESING, USERINFORMATION_UPDATING, USERINFORMATION_UPDATED_FAILED
+    USERINFORMATION_UPDATED,
+    LOGIN_PROCCESING,
+    USERINFORMATION_UPDATING,
+    USERINFORMATION_UPDATED_FAILED,
+    LOADING,
+    LOADING_FINISHED
 } from './actionTypes';
 
-const initialState = null;
+const initialState = {};
 
 export default function (state = initialState, action) {
     switch (action.type) {
         case CURRENT_USER:
         case LOGIN_SUCCESS: {
             if (action.payload) {
-                return {
+                let newState = {
                     mail: action.payload.email,
                     picture: action.payload.picture,
                     name: action.payload.name,
                     id: action.payload.user_id
                 };
+                if(action.payload.tenant) {
+                    newState.tenant = action.payload.tenant
+                }
+                return Object.assign({},state,{ user: newState} );
             }
             return state;
         }
         case USERINFORMATION_UPDATED: {
-            //BUG
-            //not reasigning until it is not possible to get the last state :(
-            //return Object.assign({}, state, action.payload);
-        }
-        case USERINFORMATION_UPDATING:{
-            
+            return Object.assign({}, state, action.payload);
         }
         case USERINFORMATION_UPDATED_FAILED: {
-            
+            // SHow Error
         }
         case LOGOUT: {
             return null;
