@@ -31,9 +31,10 @@ export function showLogin() {
 export function updateUserInformation(tenantId) {
     return (dispatch) => {
         updateUser(tenantId).then(result => {
+            let profile = getCurrentProfile();
             dispatch({
                 type:USERINFORMATION_UPDATED,
-                payload:tenantId
+                payload:profile
             });
         }).catch(err => {
             // globalerror

@@ -15,30 +15,22 @@ const initialState = { loading: false };
 export default function (state = initialState, action) {
     switch (action.type) {
         case CURRENT_USER:
+        case USERINFORMATION_UPDATED:
         case LOGIN_SUCCESS: {
             if (action.payload) {
                 let newState = {
                     mail: action.payload.email,
                     picture: action.payload.picture,
                     name: action.payload.name,
-                    id: action.payload.user_id
+                    id: action.payload.user_id,
                 };
                 if (action.payload.tenant) {
-                    newState.tenant = action.payload.tenant
+                    newState.tenant = action.payload.tenant,
+                    newState.isAdmin = action.payload.isAdmin
                 }
                 return Object.assign({},state,{ user: newState } );
             }
             return state;
-        }
-        case USERINFORMATION_UPDATED: {
-            let newState = {
-                mail: state.user.mail,
-                picture: state.user.picture,
-                name: state.user.name,
-                id: state.user.id,
-                tenant: action.payload
-            };
-            return Object.assign({},state,{ user: newState } );
         }
         case USERINFORMATION_UPDATED_FAILED: {
             // SHow Error
