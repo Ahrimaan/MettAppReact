@@ -6,8 +6,20 @@ import _ from 'lodash';
 
 class TenantComponent extends Component {
     state = {
-        loading: false
+        loading: false,
+        show: false
     };
+
+    componentWillReceiveProps(nextProps){
+        const { user } = nextProps.app;
+       if(user){
+            if(!user.tenant){
+                this.setState({show: true});
+            }else {
+                this.setState({show: false});
+            }
+       }
+    }
 
     handleChange(event, {value}) {
         this.setState({selectedItem: value});
@@ -45,7 +57,7 @@ class TenantComponent extends Component {
                 closeOnDimmerClick={false}
                 closeOnDocumentClick={false}
                 size='mini'
-                open={showDialog}>
+                open={this.state.show}>
                 <Modal.Header>
                     Zuordnung wählen
                 </Modal.Header>
@@ -83,7 +95,7 @@ const mapDispatchToProps = dispatch => {
   }
 
 function mapStateToProps(props) {
-    return {tenant: props.tenant}
+    return {tenant: props.tenant, app: props.app}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TenantComponent);

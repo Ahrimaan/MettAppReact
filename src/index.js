@@ -11,6 +11,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 // Import Components
 import { HeaderComponent } from './headerbar';
 import { TenantDialogComponent } from './tenant';
+import { LoaderComponent } from './shared';
 
 import appRoutes from './appRoutes';
 import appReducer from './appReducer';
@@ -25,6 +26,7 @@ ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
       <Container >
+          <LoaderComponent />
          <HeaderComponent />
          <TenantDialogComponent/>
         <Switch children={appRoutes}>

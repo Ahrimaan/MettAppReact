@@ -7,7 +7,8 @@ import {
     LOGIN_PROCCESING,
     USERINFORMATION_UPDATED,
     USERINFORMATION_UPDATED_FAILED,
-    USERINFORMATION_UPDATING
+    LOADING,
+    LOADING_FINISHED
 } from './actionTypes';
 import { showTenantDialog, hideTenantDialog } from '../tenant';
 import { getCurrentProfile, login, logout, updateUser } from './authenticationService';
@@ -29,21 +30,15 @@ export function showLogin() {
 
 export function updateUserInformation(tenantId) {
     return (dispatch) => {
-        dispatch({type:USERINFORMATION_UPDATING})
-        let action = updateUser(tenantId).then(result => {
-            /* dispatch({
+        updateUser(tenantId).then(result => {
+            dispatch({
                 type:USERINFORMATION_UPDATED,
-                payload:result
-            }); */
-            // Find a better way, the component itself should track if a tenant switch is needed
-            dispatch({type:HIDE_TENANT_DIALOG})
-            let profile = getCurrentProfile();
-            dispatch({type:CURRENT_USER, payload: profile});
+                payload:tenantId
+            });
         }).catch(err => {
             // globalerror
             dispatch({type:USERINFORMATION_UPDATED_FAILED});
-        })
-        dispatch(action);
+        });
     }
 }
 
@@ -68,9 +63,13 @@ export function logoutCurrentUser() {
 }
 
 export function showLoading(){
-    console.log('SHOW LOADING');
+    return (dispatch) => {
+        dispatch({type:LOADING});
+    }
 }
 
 export function hideLoading() {
-    console.log('HIDE LOADING');
+    return (dispatch) => {
+        dispatch({type:LOADING_FINISHED});
+    }
 }

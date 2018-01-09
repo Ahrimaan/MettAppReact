@@ -8,7 +8,9 @@ import {
     LOADING_FINISHED
 } from './actionTypes';
 
-const initialState = {};
+import _ from 'lodash';
+
+const initialState = { loading: false };
 
 export default function (state = initialState, action) {
     switch (action.type) {
@@ -21,21 +23,34 @@ export default function (state = initialState, action) {
                     name: action.payload.name,
                     id: action.payload.user_id
                 };
-                if(action.payload.tenant) {
+                if (action.payload.tenant) {
                     newState.tenant = action.payload.tenant
                 }
-                return Object.assign({},state,{ user: newState} );
+                return Object.assign({},state,{ user: newState } );
             }
             return state;
         }
         case USERINFORMATION_UPDATED: {
-            return Object.assign({}, state, action.payload);
+            let newState = {
+                mail: state.user.mail,
+                picture: state.user.picture,
+                name: state.user.name,
+                id: state.user.id,
+                tenant: action.payload
+            };
+            return Object.assign({},state,{ user: newState } );
         }
         case USERINFORMATION_UPDATED_FAILED: {
             // SHow Error
         }
+        case LOADING: {
+            return Object.assign({}, state, { loading: true });
+        }
+        case LOADING_FINISHED: {
+            return Object.assign({}, state, { loading: false });
+        }
         case LOGOUT: {
-            return null;
+            return {};
         }
         default:
             return state ? state : null;
