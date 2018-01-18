@@ -8,10 +8,12 @@ import {
     USERINFORMATION_UPDATED,
     USERINFORMATION_UPDATED_FAILED,
     LOADING,
-    LOADING_FINISHED
+    LOADING_FINISHED,
+    USERINFORMATION_PAYPALLINK_UPDATED,
+    USERINFORMATION_PAYPALLINK_UPDATING
 } from './actionTypes';
 import { showTenantDialog, hideTenantDialog } from '../tenant';
-import { getCurrentProfile, login, logout, updateUser } from './authenticationService';
+import { getCurrentProfile, login, logout, updateUser, updatePaypalLink as paypalUpdate } from './authenticationService';
 import { HIDE_TENANT_DIALOG } from '../tenant/actionTypes';
 
 export function showLogin() {
@@ -40,6 +42,16 @@ export function updateUserInformation(tenantId) {
             // globalerror
             dispatch({type:USERINFORMATION_UPDATED_FAILED});
         });
+    }
+}
+
+export function updatePaypalLink(paypalLink) {
+    return (dispatch) => {
+        paypalUpdate(paypalLink).then(result => {
+            dispatch({ type:USERINFORMATION_UPDATED , payload: { paypalLink: paypalLink } });
+        }).catch(err => {
+            dispatch({type: USERINFORMATION_UPDATED_FAILED});
+        })
     }
 }
 

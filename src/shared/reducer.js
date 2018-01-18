@@ -28,6 +28,9 @@ export default function (state = initialState, action) {
                     newState.tenant = action.payload.tenant,
                     newState.isAdmin = action.payload.isAdmin
                 }
+                if(action.payload.paypalLink) {
+                    newState.paypalLink = action.payload.paypalLink;
+                }
                 return Object.assign({},state,{ user: newState } );
             }
             return state;

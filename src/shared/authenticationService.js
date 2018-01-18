@@ -72,12 +72,12 @@ export function getIdToken(){
 
 export function updateUser(tentantId) {
     let currentProfile = getCurrentProfile();
-
     return new Promise((resolve, reject) => {
         let item = {
             tenantId: tentantId,
             mail: currentProfile.email, 
-            username: currentProfile.name
+            username: currentProfile.name,
+            paypalLink: paypalLink
         }
        httpClient.post(config.UserInfoUrl, item).then(result => {
             updateStorageUser({ tenant: tentantId });
@@ -86,6 +86,23 @@ export function updateUser(tentantId) {
             console.error(err);
             return reject(err);
         }) 
+    });
+}
+
+export function updatePaypalLink(paypalLink) {
+    let currentProfile = getCurrentProfile();
+    return new Promise((resolve,reject) => {
+        let item = {
+            username:currentProfile.name,
+            paypalLink: paypalLink
+        };
+        httpClient.post(config.UserInfoUrl, item).then(result => {
+            updateStorageUser({paypalLink:paypalLink });
+            resolve({paypalLink:paypalLink});
+        }).catch(err => {
+            console.error(err);
+            reject(err);
+        })
     });
 }
 
