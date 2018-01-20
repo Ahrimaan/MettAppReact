@@ -39,7 +39,8 @@ export function login() {
                     let user =  Object.assign({},userInfo,profile);
                     localStorage.setItem(PROFILE_KEY, JSON.stringify(user));
                     lock.hide();
-                    return resolve({ user, tokenInfo });
+                    let localUser = getCurrentProfile();
+                    return resolve({ user:localUser, tokenInfo });
                 }).catch(err => {
                     console.error(err);
                 });
@@ -76,8 +77,7 @@ export function updateUser(tentantId) {
         let item = {
             tenantId: tentantId,
             mail: currentProfile.email, 
-            username: currentProfile.name,
-            paypalLink: paypalLink
+            username: currentProfile.name
         }
        httpClient.post(config.UserInfoUrl, item).then(result => {
             updateStorageUser({ tenant: tentantId });

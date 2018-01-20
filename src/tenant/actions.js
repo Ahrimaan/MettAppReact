@@ -2,13 +2,6 @@ import {HIDE_TENANT_DIALOG, SHOW_TENANT_DIALOG, LOAD_TENANTS, TENANTS_LOADED} fr
 import config from '../config.js';
 import { httpClient, getUserId } from '../shared';
 
-export function showTenantDialog() {
-    return (dispatch) => {
-        dispatch({type: SHOW_TENANT_DIALOG});
-        dispatch(loadTenants());
-    }
-}
-
 export function loadTenants() {
     return (dispatch) => {
         dispatch({type: LOAD_TENANTS});
@@ -19,10 +12,4 @@ export function loadTenants() {
             console.log('err happened', err);
         })
     };
-}
-
-export function hideTenantDialog() {
-    return (dispatch) => {
-        dispatch({type: HIDE_TENANT_DIALOG});
-    }
 }

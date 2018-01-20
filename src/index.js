@@ -1,12 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
+import { Provider, connect } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import promise from 'redux-promise';
 import logger from 'redux-logger'
 import { Container } from 'semantic-ui-react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { ConnectedRouter, routerReducer, routerMiddleware } from 'react-router-redux'
+import { Switch } from 'react-router';
+import createHistory from 'history/createBrowserHistory'
 
 // Import Components
 import { HeaderComponent } from './headerbar';
@@ -16,23 +18,28 @@ import { LoaderComponent } from './shared';
 import appRoutes from './appRoutes';
 import appReducer from './appReducer';
 
-
+const history = createHistory({forceRefresh:false});
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(appReducer, /* preloadedState, */ composeEnhancers(
-  applyMiddleware(thunkMiddleware, promise, logger)
+  applyMiddleware(thunkMiddleware, promise, logger,routerMiddleware(history))
 ));
+
+const ConnectedSwitch = connect(state => ({
+  location: state.location
+}))(Switch)
+
+
 
 ReactDOM.render(
   <Provider store={store}>
-    <BrowserRouter>
+    <ConnectedRouter history={ history }>
       <Container >
           <LoaderComponent />
          <HeaderComponent />
-         <TenantDialogComponent/>
-        <Switch children={appRoutes}>
+        <ConnectedSwitch children={appRoutes}>
 
-        </Switch>
+        </ConnectedSwitch>
       </Container>
-    </BrowserRouter>
+    </ConnectedRouter>
   </Provider>
   , document.querySelector('.application'));

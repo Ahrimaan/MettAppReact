@@ -2,23 +2,17 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Button, Modal, Dropdown} from 'semantic-ui-react'
 import { updateUserInformation } from '../shared';
+import { loadTenants } from './actions';
 import _ from 'lodash';
 
 class TenantComponent extends Component {
     state = {
         loading: false,
-        show: false
+        showDialog: true
     };
 
-    componentWillReceiveProps(nextProps){
-        const { user } = nextProps.app;
-       if(user){
-            if(!user.tenant){
-                this.setState({show: true});
-            }else {
-                this.setState({show: false});
-            }
-       }
+    componentWillMount(){
+        this.props.loadTenantList();
     }
 
     handleChange(event, {value}) {
@@ -26,38 +20,14 @@ class TenantComponent extends Component {
     };
 
     render() {
-        return this.renderModal();
-    }
-
-    handleSave() {
-        this.props.updateUserInfo(this.state.selectedItem);
-    }
-
-    renderSelectList() {
         const {tenantList} = this.props.tenant;
-        const items = [];
-        tenantList.forEach(tenant => {
-            items.push({value: tenant.id, text: tenant.tenantName})
-        });
-        return <Dropdown
-            fluid
-            selection
-            onChange={this.handleChange = this
-            .handleChange
-            .bind(this)}
-            placeholder="Bitte wähle eine Abteilung"
-            options={items}/>;
-    }
-
-    renderModal() {
-        const {showDialog, tenantList} = this.props.tenant;
 
         return (
             <Modal
                 closeOnDimmerClick={false}
                 closeOnDocumentClick={false}
                 size='mini'
-                open={this.state.show}>
+                open={ this.state.showDialog }>
                 <Modal.Header>
                     Zuordnung wählen
                 </Modal.Header>
@@ -84,18 +54,49 @@ class TenantComponent extends Component {
             </Modal>
         );
     }
+
+    handleSave() {
+        this.props.updateUserInfo(this.state.selectedItem, res => {
+            if(res){
+                this.setState({ showDialog : false})
+            }
+        });
+    }
+
+    renderSelectList() {
+        const {tenantList} = this.props.tenant;
+        const items = [];
+        tenantList.forEach(tenant => {
+            items.push({value: tenant.id, text: tenant.tenantName})
+        });
+        return <Dropdown
+            fluid
+            selection
+            onChange={this.handleChange = this
+            .handleChange
+            .bind(this)}
+            placeholder="Bitte wähle eine Abteilung"
+            options={items}/>;
+    }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
       updateUserInfo: id => {
         dispatch(updateUserInformation(id))
+      },
+      loadTenantList: () => {
+          dispatch(loadTenants());
       }
     }
   }
 
 function mapStateToProps(props) {
-    return {tenant: props.tenant, app: props.app}
+    let newProps = {
+        tenant: props.tenant,
+        app: props.app
+    }
+    return newProps;
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TenantComponent);

@@ -2,26 +2,22 @@ import {
     CURRENT_USER,
     LOGIN_FAILURE,
     LOGIN_SUCCESS,
-    LOGIN_WITH_GOOGLE,
     LOGOUT,
     LOGIN_PROCCESING,
     USERINFORMATION_UPDATED,
     USERINFORMATION_UPDATED_FAILED,
     LOADING,
-    LOADING_FINISHED,
-    USERINFORMATION_PAYPALLINK_UPDATED,
-    USERINFORMATION_PAYPALLINK_UPDATING
+    LOADING_FINISHED
 } from './actionTypes';
-import { showTenantDialog, hideTenantDialog } from '../tenant';
 import { getCurrentProfile, login, logout, updateUser, updatePaypalLink as paypalUpdate } from './authenticationService';
-import { HIDE_TENANT_DIALOG } from '../tenant/actionTypes';
+import { push } from 'react-router-redux';
 
 export function showLogin() {
     return (dispatch) => {
         dispatch({ type: LOGIN_PROCCESING });
         login().then(result => {
             if (!result.user.tenant) {
-                dispatch(showTenantDialog());
+                dispatch(push('/tenant'));            
             }
             dispatch({ type: LOGIN_SUCCESS, payload: result.user });
         }).catch(err => {
@@ -30,7 +26,7 @@ export function showLogin() {
     }
 }
 
-export function updateUserInformation(tenantId) {
+export function updateUserInformation(tenantId, callBack) {
     return (dispatch) => {
         updateUser(tenantId).then(result => {
             let profile = getCurrentProfile();
@@ -38,6 +34,10 @@ export function updateUserInformation(tenantId) {
                 type:USERINFORMATION_UPDATED,
                 payload:profile
             });
+            dispatch(push('/'));   
+            if(callBack){
+                callBack(true);
+            }
         }).catch(err => {
             // globalerror
             dispatch({type:USERINFORMATION_UPDATED_FAILED});
@@ -60,7 +60,7 @@ export function fetchProfile() {
         let profile = getCurrentProfile();
         if (profile) {
             if (!profile.tenant) {
-                dispatch(showTenantDialog());
+                dispatch(push('/tenant'));   
             }
             dispatch({ type: CURRENT_USER, payload: profile });
         }
