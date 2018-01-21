@@ -34,7 +34,8 @@ ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={ history }>
       <Container >
-          <LoaderComponent />
+        <TenantDialogComponent />
+         <LoaderComponent />
          <HeaderComponent />
         <ConnectedSwitch children={appRoutes}>
 

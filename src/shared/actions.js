@@ -10,6 +10,7 @@ import {
     LOADING_FINISHED
 } from './actionTypes';
 import { getCurrentProfile, login, logout, updateUser, updatePaypalLink as paypalUpdate } from './authenticationService';
+import {showTenantDialog, hideTenantDialog  } from '../tenant'
 import { push } from 'react-router-redux';
 
 export function showLogin() {
@@ -17,7 +18,7 @@ export function showLogin() {
         dispatch({ type: LOGIN_PROCCESING });
         login().then(result => {
             if (!result.user.tenant) {
-                dispatch(push('/tenant'));            
+                dispatch(showTenantDialog()); 
             }
             dispatch({ type: LOGIN_SUCCESS, payload: result.user });
         }).catch(err => {
@@ -26,18 +27,16 @@ export function showLogin() {
     }
 }
 
-export function updateUserInformation(tenantId, callBack) {
-    return (dispatch) => {
+export function updateUserInformation(tenantId) {
+    return (dispatch, callBack) => {
         updateUser(tenantId).then(result => {
             let profile = getCurrentProfile();
             dispatch({
                 type:USERINFORMATION_UPDATED,
                 payload:profile
             });
+            dispatch(hideTenantDialog());
             dispatch(push('/'));   
-            if(callBack){
-                callBack(true);
-            }
         }).catch(err => {
             // globalerror
             dispatch({type:USERINFORMATION_UPDATED_FAILED});
@@ -60,7 +59,7 @@ export function fetchProfile() {
         let profile = getCurrentProfile();
         if (profile) {
             if (!profile.tenant) {
-                dispatch(push('/tenant'));   
+                dispatch(showTenantDialog()); 
             }
             dispatch({ type: CURRENT_USER, payload: profile });
         }
