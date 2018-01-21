@@ -7,7 +7,7 @@ import _ from 'lodash';
 class TenantComponent extends Component {
     state = {
         loading: false,
-        showDialog: true
+        showDialog: false
     };
 
     componentWillReceiveProps(newProps) {

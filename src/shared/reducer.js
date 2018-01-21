@@ -15,7 +15,6 @@ const initialState = { loading: false };
 export default function (state = initialState, action) {
     switch (action.type) {
         case CURRENT_USER:
-        case USERINFORMATION_UPDATED:
         case LOGIN_SUCCESS: {
             if (action.payload) {
                 let newState = {
@@ -34,6 +33,17 @@ export default function (state = initialState, action) {
                 return Object.assign({},state,{ user: newState } );
             }
             return state;
+        }
+        case USERINFORMATION_UPDATED: {
+            let newState = _.clone(state);
+            if(action.payload.tenant) {
+                newState.user.tenant = action.payload.tenant;
+                newState.user.isAdmin = action.payload.isAdmin
+            }
+            if(action.payload.paypalLink) {
+                newState.user.paypalLink = action.payload.paypalLink;
+            }
+            return newState;
         }
         case USERINFORMATION_UPDATED_FAILED: {
             // SHow Error

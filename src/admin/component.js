@@ -1,18 +1,22 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Button, Modal, Dropdown, Input, Label} from 'semantic-ui-react'
-import { updatePaypalLink} from './action';
-import _ from 'lodash';
+import {updatePaypalLink} from './action';
+import _ from 'lodash'
 
 class AdminComponent extends Component {
     state = {
         show: true,
         link: '',
-        linkPrefix:'https://paypal.me/'
+        linkPrefix: 'https://paypal.me/'
     };
 
-    componentWillReceiveProps(nextProps){
-        this.setState({link: nextProps.app.user.paypalLink})
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.app.user.paypalLink) {
+            let paypal = _.last(_.split(nextProps.app.user.paypalLink ,'/'));
+            this.setState({link: paypal})
+        }
+
     }
 
     handleChange(event, {value}) {
@@ -40,14 +44,15 @@ class AdminComponent extends Component {
                     Zuordnung wählen
                 </Modal.Header>
                 <Modal.Content>
-                    <Input value={ this.state.link } label={ this.state.linkPrefix } 
-                    onChange= { this.handleChange.bind(this) } type='text' placeholder='Your Link' />
+                    <Input value={this.state.link} label={this.state.linkPrefix}
+                           onChange={this.handleChange.bind(this)} type='text' placeholder='Your Link'/>
                 </Modal.Content>
                 <Modal.Actions>
                     <Button loading={false} //change this to global loader if developed
-                        disabled={!this.state.link} positive icon='checkmark' labelPosition='right' content='Save' onClick={this.handleSave = this
-                        .handleSave
-                        .bind(this)}/>
+                            disabled={!this.state.link} positive icon='checkmark' labelPosition='right' content='Save'
+                            onClick={this.handleSave = this
+                                .handleSave
+                                .bind(this)}/>
                 </Modal.Actions>
             </Modal>
         );
@@ -63,7 +68,7 @@ const mapDispatchToProps = dispatch => {
 }
 
 function mapStateToProps(props) {
-    return {app: props.app, admin: props.admin }
+    return {app: props.app, admin: props.admin}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdminComponent);
