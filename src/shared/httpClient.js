@@ -1,25 +1,26 @@
 import axios from 'axios';
 import {hideLoading, showLoading} from './actions';
 import {getIdToken} from './authenticationService';
+import { store } from '../store';
 
 class httpClient {
     constructor() {
         axios.interceptors.request.use(request => {
                 console.debug(request);
-                showLoading();
+                store.dispatch(showLoading());
                 return request;
             }, reject => {
                 console.error(reject);
-                hideLoading();                
+                store.dispatch(hideLoading());                
                 return reject;
             });
         axios.interceptors.response.use(response => {
-            hideLoading();
+            store.dispatch(hideLoading());
             console.debug(response);
             return response;
         }, reject => {
             console.error(reject);
-            hideLoading();           
+            store.dispatch(hideLoading());           
             return reject;
         });
     }
