@@ -1,17 +1,11 @@
-import { LOAD_TENANTS, SHOW_TENANT_DIALOG, TENANTS_LOADED, HIDE_TENANT_DIALOG } from './actionTypes';
+import { LOAD_TENANTS, TENANTS_LOADED} from './actionTypes';
 
-const initialState = { showDialog: false };
+const initialState = { tenantList:null};
 
 export default function (state = initialState, action) {
     switch (action.type) {
-        case SHOW_TENANT_DIALOG: {
-            return Object.assign({}, state, { showDialog: true });
-        }
         case TENANTS_LOADED: {
             return Object.assign({}, state, { tenantList: action.payload })
-        }
-        case HIDE_TENANT_DIALOG: {
-            return Object.assign({}, state, { showDialog: false });
         }
         default:
             return state

@@ -46,6 +46,17 @@ class httpClient {
 
         return axios.post(url,body, {headers: axiosHeader});
     }
+    
+    put(url,body,header) {
+        let axiosHeader = {
+            Authorization: `Bearer ${getIdToken()}`
+        };
+        if (header) {
+            Object.assign(axiosHeader, axiosHeader, header);
+        }
+
+        return axios.put(url,body, {headers: axiosHeader});
+    }
 }
 
 export default(new httpClient());

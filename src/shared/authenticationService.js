@@ -71,15 +71,13 @@ export function getIdToken(){
     return tokens.idToken;
 }
 
-export function updateUser(tentantId) {
-    let currentProfile = getCurrentProfile();
+export function updateTenenatId(tentantId) {
     return new Promise((resolve, reject) => {
         let item = {
             tenantId: tentantId,
-            mail: currentProfile.email, 
-            username: currentProfile.name
+            userId: getUserId()
         }
-       httpClient.post(config.UserInfoUrl, item).then(result => {
+       httpClient.patch(config.UserInfoUrl, item).then(result => {
             updateStorageUser({ tenant: tentantId });
             resolve({ tenant: tentantId });
         }).catch(err => {
@@ -90,13 +88,12 @@ export function updateUser(tentantId) {
 }
 
 export function updatePaypalLink(paypalLink) {
-    let currentProfile = getCurrentProfile();
     return new Promise((resolve,reject) => {
         let item = {
-            username:currentProfile.name,
+            userId: getUserId(),
             paypalLink: paypalLink
         };
-        httpClient.post(config.UserInfoUrl, item).then(result => {
+        httpClient.patch(config.UserInfoUrl, item).then(result => {
             updateStorageUser({paypalLink:paypalLink });
             resolve({paypalLink:paypalLink});
         }).catch(err => {

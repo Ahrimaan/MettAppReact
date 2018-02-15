@@ -1,22 +1,23 @@
 import React, { Component } from 'react';
+import PropTypes from "prop-types"
 import { connect } from 'react-redux';
 import { Button, Modal, Dropdown } from 'semantic-ui-react'
-import { updateUserInformation } from '../shared';
+import { updateTenantId } from '../shared';
 import _ from 'lodash';
+import { loadTenants } from './actions';
 
 class TenantComponent extends Component {
-    state = {
-        loading: false,
-        showDialog: false
-    };
-
-    componentWillReceiveProps(newProps) {
-        if(newProps.tenant.showDialog ){
-            this.setState({ showDialog:true });
-        }else {
-            this.setState({ showDialog:false });
-        }
-        
+    static propTypes = {
+        updateTenantId: PropTypes.func.isRequired,
+        loadTenants: PropTypes.func.isRequired,
+        app: PropTypes.object,
+        tenant: PropTypes.object
+    }
+    
+    constructor(props){
+        super(props);
+        this.state = { selectedItem: "", showDialog: true}
+        this.props.loadTenants();
     }
 
     handleChange(event, { value }) {
@@ -25,8 +26,9 @@ class TenantComponent extends Component {
 
     render() {
         const { tenantList } = this.props.tenant;
+        const { app } = this.props;
 
-        return (
+        return (           
             <Modal
                 closeOnDimmerClick={false}
                 closeOnDocumentClick={false}
@@ -60,7 +62,7 @@ class TenantComponent extends Component {
     }
 
     handleSave() {
-        this.props.updateUserInfo(this.state.selectedItem, res => {
+        this.props.updateTenantId(this.state.selectedItem, res => {
             if (res) {
                 this.setState({ showDialog: false })
             }
@@ -84,17 +86,6 @@ class TenantComponent extends Component {
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        updateUserInfo: id => {
-            dispatch(updateUserInformation(id))
-        },
-        loadTenantList: () => {
-            dispatch(loadTenants());
-        }
-    }
-}
-
 function mapStateToProps(props) {
     let newProps = {
         tenant: props.tenant,
@@ -103,4 +94,4 @@ function mapStateToProps(props) {
     return newProps;
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TenantComponent);
+export default connect(mapStateToProps, { updateTenantId, loadTenants })(TenantComponent);

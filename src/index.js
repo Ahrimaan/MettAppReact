@@ -4,11 +4,10 @@ import { Provider, connect } from 'react-redux';
 import { Container } from 'semantic-ui-react';
 import { ConnectedRouter, routerReducer, routerMiddleware } from 'react-router-redux'
 import { Switch } from 'react-router';
-import {history, store } from './store';
+import { history, store } from './store';
 
 // Import Components
 import { HeaderComponent } from './headerbar';
-import { TenantDialogComponent } from './tenant';
 import { LoaderComponent } from './shared';
 
 import appRoutes from './appRoutes';
@@ -20,13 +19,11 @@ const ConnectedSwitch = connect(state => ({
 
 ReactDOM.render(
   <Provider store={store}>
-    <ConnectedRouter history={ history }>
+    <ConnectedRouter history={history}>
       <Container >
-        <TenantDialogComponent />
-         <LoaderComponent />
-         <HeaderComponent />
+        <LoaderComponent />
+        <HeaderComponent />
         <ConnectedSwitch children={appRoutes}>
-
         </ConnectedSwitch>
       </Container>
     </ConnectedRouter>
