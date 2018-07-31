@@ -1,14 +1,13 @@
-import {TENANTS_LOADED, SHOW_TENANT_DIALOG, HIDE_TENANT_DIALOG} from './actionTypes';
-import config from '../config.js';
-import { httpClient} from '../shared';
+import { TENANTS_LOADED } from './actionTypes';
+import { firestore } from 'firebase';
 
-export function loadTenants() {
+export function loadTenants(callback) {
     return (dispatch) => {
-        let client = httpClient.get(config.TenantURL);
-        client.then(result => {
-            dispatch({type:TENANTS_LOADED , payload:result.data});
-        }).catch(err => {
-            console.log('err happened', err);
+        firestore().collection('/tentant').get().then(result => {
+            dispatch({ type: TENANTS_LOADED, payload: result })
+            callback(null);
+        }, err => {
+            callback(err);
         })
     };
 }
