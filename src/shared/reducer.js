@@ -1,11 +1,10 @@
 import {
     LOGIN_SUCCESS, CURRENT_USER, LOGOUT,
     USERINFORMATION_UPDATED,
-    LOGIN_PROCCESING,
-    USERINFORMATION_UPDATING,
     USERINFORMATION_UPDATED_FAILED,
     LOADING,
-    LOADING_FINISHED
+    LOADING_FINISHED,
+    LOGIN
 } from './actionTypes';
 
 import _ from 'lodash';
@@ -14,39 +13,16 @@ const initialState = { loading: false };
 
 export default function (state = initialState, action) {
     switch (action.type) {
-        case CURRENT_USER:
-        case LOGIN_SUCCESS: {
+        case LOGIN:{
             if (action.payload) {
-                let newState = {
-                    mail: action.payload.email,
-                    picture: action.payload.picture,
-                    name: action.payload.name,
-                    id: action.payload.user_id,
-                };
-                if (action.payload.tenant) {
-                    newState.tenant = action.payload.tenant,
-                    newState.isAdmin = action.payload.isAdmin
-                }
-                if(action.payload.paypalLink) {
-                    newState.paypalLink = action.payload.paypalLink;
-                }
-                return Object.assign({},state,{ user: newState } );
+                let newState = _.cloneDeep(state);
+                let user = {};
+                user.displayName = action.payload.displayName;
+                user.email = action.payload.email;
+                user.picture = action.payload.photoURL ? action.payload.photoURL : null;
+                return Object.assign({},state,{ user: user } );
             }
             return state;
-        }
-        case USERINFORMATION_UPDATED: {
-            let newState = _.clone(state);
-            if(action.payload.tenant) {
-                newState.user.tenant = action.payload.tenant;
-                newState.user.isAdmin = action.payload.isAdmin
-            }
-            if(action.payload.paypalLink) {
-                newState.user.paypalLink = action.payload.paypalLink;
-            }
-            return newState;
-        }
-        case USERINFORMATION_UPDATED_FAILED: {
-            // SHow Error
         }
         case LOADING: {
             return Object.assign({}, state, { loading: true });

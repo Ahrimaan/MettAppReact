@@ -5,16 +5,14 @@ import { Container } from 'semantic-ui-react';
 import { ConnectedRouter, routerReducer, routerMiddleware } from 'react-router-redux'
 import { Switch } from 'react-router';
 import { history, store } from './store';
-
+import { initializeApp } from 'firebase/app';
 // Import Components
 import { HeaderComponent } from './headerbar';
 import { LoaderComponent } from './shared';
-
+import config from './config';
 import appRoutes from './appRoutes';
 
-const ConnectedSwitch = connect(state => ({
-  location: state.location
-}))(Switch)
+initializeApp(config.firebaseData);
 
 
 ReactDOM.render(
@@ -23,8 +21,8 @@ ReactDOM.render(
       <Container >
         <LoaderComponent />
         <HeaderComponent />
-        <ConnectedSwitch children={appRoutes}>
-        </ConnectedSwitch>
+        <Switch children={appRoutes}>
+        </Switch>
       </Container>
     </ConnectedRouter>
   </Provider>

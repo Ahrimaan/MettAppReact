@@ -1,44 +1,27 @@
 import {
-    CURRENT_USER,
+    LOGIN,
     LOGIN_FAILURE,
-    LOGIN_SUCCESS,
     LOGOUT,
-    LOGIN_PROCCESING,
     USERINFORMATION_UPDATED,
     USERINFORMATION_UPDATED_FAILED,
     LOADING,
     LOADING_FINISHED
 } from './actionTypes';
-import { getCurrentProfile, login, logout, updateTenenatId, updatePaypalLink as paypalUpdate } from './authenticationService';
-import { push } from 'react-router-redux';
 
-export function showLogin() {
+import { auth } from 'firebase';
+import { push  } from 'react-router-redux';
+
+export function loginWithGoogle() {   
     return (dispatch) => {
-        dispatch({ type: LOGIN_PROCCESING });
-        login().then(result => {
-            dispatch({ type: LOGIN_SUCCESS, payload: result.user });
-        }).catch(err => {
-            dispatch({ type: LOGIN_FAILURE, payload: err });
-        })
+        subscribeUserEvent();
+        auth().signInWithPopup(new auth.GoogleAuthProvider());
     }
 }
 
-export function updateTenantId(tenantId, cb) {
+export function loginWithCredentials(username, password) {
     return (dispatch) => {
-        updateTenenatId(tenantId).then(result => {
-            let profile = getCurrentProfile();
-            dispatch({
-                type:USERINFORMATION_UPDATED,
-                payload:profile
-            });
-            if(cb){
-                cb(true);
-            }
-            dispatch(push('/'));   
-        }).catch(err => {
-            // globalerror
-            dispatch({type:USERINFORMATION_UPDATED_FAILED});
-        });
+        subscribeUserEvent();
+        auth().signInWithEmailAndPassword(username,password);
     }
 }
 
@@ -52,31 +35,26 @@ export function updatePaypalLink(paypalLink) {
     }
 }
 
-export function fetchProfile() {
+export function subscribeUserEvent() {
     return (dispatch) => {
-        let profile = getCurrentProfile();
-        if (profile) {
-            dispatch({ type: CURRENT_USER, payload: profile });
-        }
+        auth().onAuthStateChanged(result => {
+            if(result){
+                dispatch({type: LOGIN, payload: result});
+                dispatch(push('/home'));
+            } else{
+                dispatch({type: LOGOUT});
+                dispatch(push('/login'));
+            }
+        }, err => {
+            dispatch({ type: LOGIN_FAILURE, payload :err});
+        });
 
     }
 }
 
 export function logoutCurrentUser() {
     return (dispatch) => {
-        logout();
-        dispatch({ type: LOGOUT })
-    }
-}
-
-export function showLoading(){
-    return (dispatch) => {
-        dispatch({type:LOADING});
-    }
-}
-
-export function hideLoading() {
-    return (dispatch) => {
-        dispatch({type:LOADING_FINISHED});
+        auth().signOut();
+        push('/login');
     }
 }

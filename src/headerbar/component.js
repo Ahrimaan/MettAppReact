@@ -1,16 +1,14 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {Link} from 'react-router-dom';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import AccountMenu from './accountMenu';
-import {showLogin, fetchProfile, logoutCurrentUser} from '../shared';
-import {Input, Menu, Header} from 'semantic-ui-react'
+import { subscribeUserEvent, logoutCurrentUser } from '../shared';
+import { Input, Menu, Header } from 'semantic-ui-react'
 import Button from 'semantic-ui-react/dist/commonjs/elements/Button/Button';
 
 class HeaderComponent extends Component {
-    componentDidMount() {
-        this
-            .props
-            .fetchProfile();
+    componentWillMount() {
+        this.props.subscribeUserEvent();
     }
 
     state = {
@@ -29,40 +27,40 @@ class HeaderComponent extends Component {
         if (this.props.app.user) {
             if (this.props.app.user.isAdmin) {
                 return (
-                    <Menu.Item name='Admin' as={ Link } to='/admin' >
-                            
-                        </Menu.Item>
+                    <Menu.Item name='Admin' as={Link} to='/admin' >
+
+                    </Menu.Item>
                 );
             }
         }
     }
 
     render() {
-        const {activeItem} = this.state
+        const { activeItem } = this.state
         return (
             <Menu>
                 <Menu.Item
                     position='left'
                     as={Link}
-                    to='/'
+                    to='/home'
                     name='home'
-                    active={activeItem === 'home'}
-                    onClick={this.handleItemClick}/>
+                    active={activeItem === 'home'}/>
                 <Header as='h3'>Mett App</Header>
                 <Menu.Menu position='right'>
                     {this.renderAdminLink()}
                     {this.props.app.user && (
                         <Menu.Item >
                             <AccountMenu
-                                username={this.props.app.user.name}
-                                imageUrl={this.props.app.user.picture}/>
+                                username={this.props.app.user.displayName}
+                                imageUrl={this.props.app.user.picture} />
                         </Menu.Item>
                     )}
 
-                    {!this.props.app.user && (<Menu.Item name='login' onClick={this.handleLoginClick}/>)
-}
-                    {this.props.app.user && (<Menu.Item name='logout' onClick={this.handleLogoutClick}/>)
-}
+                    {!this.props.app.user && (<Menu.Item name='login' as={Link}
+                        to='login' />)
+                    }
+                    {this.props.app.user && (<Menu.Item name='logout' onClick={this.handleLogoutClick} />)
+                    }
 
                 </Menu.Menu>
             </Menu>
@@ -71,7 +69,7 @@ class HeaderComponent extends Component {
 }
 
 function mapStateToProps(props) {
-    return {app: props.app}
+    return { app: props.app }
 }
 
-export default connect(mapStateToProps, {showLogin, fetchProfile, logoutCurrentUser})(HeaderComponent);
+export default connect(mapStateToProps, { subscribeUserEvent, logoutCurrentUser })(HeaderComponent);
