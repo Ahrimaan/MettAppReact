@@ -40,7 +40,7 @@ export function subscribeUserEvent() {
         auth().onAuthStateChanged(result => {
             if(result){
                 dispatch({type: LOGIN, payload: result});
-                dispatch(push('/home'));
+                dispatch(push('/tenant'));
             } else{
                 dispatch({type: LOGOUT});
                 dispatch(push('/login'));

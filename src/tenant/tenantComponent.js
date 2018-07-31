@@ -2,21 +2,19 @@ import React, { Component } from 'react';
 import PropTypes from "prop-types"
 import { connect } from 'react-redux';
 import { Button, Modal, Dropdown } from 'semantic-ui-react'
-import { updateTenantId } from '../shared';
 import _ from 'lodash';
 import { loadTenants } from './actions';
 
 class TenantComponent extends Component {
     static propTypes = {
-        updateTenantId: PropTypes.func.isRequired,
         loadTenants: PropTypes.func.isRequired,
         app: PropTypes.object,
         tenant: PropTypes.object
     }
-    
-    constructor(props){
+
+    constructor(props) {
         super(props);
-        this.state = { selectedItem: "", showDialog: true}
+        this.state = { selectedItem: "", showDialog: true }
         this.props.loadTenants();
     }
 
@@ -28,7 +26,7 @@ class TenantComponent extends Component {
         const { tenantList } = this.props.tenant;
         const { app } = this.props;
 
-        return (           
+        return (
             <Modal
                 closeOnDimmerClick={false}
                 closeOnDocumentClick={false}
@@ -38,7 +36,7 @@ class TenantComponent extends Component {
                     Zuordnung wählen
                 </Modal.Header>
                 <Modal.Content>
-                    {tenantList && (this.renderSelectList())}
+                    {tenantList && (this.renderSelectList(tenantList))}
                     {!tenantList && (
                         <div>
                             <Button disabled loading primary>Loading</Button>
@@ -69,11 +67,10 @@ class TenantComponent extends Component {
         });
     }
 
-    renderSelectList() {
-        const { tenantList } = this.props.tenant;
+    renderSelectList(tenantList) {
         const items = [];
         tenantList.forEach(tenant => {
-            items.push({ value: tenant.id, text: tenant.tenantName })
+            items.push({ value: tenant.id, text: tenant.name })
         });
         return <Dropdown
             fluid
@@ -94,4 +91,4 @@ function mapStateToProps(props) {
     return newProps;
 }
 
-export default connect(mapStateToProps, { updateTenantId, loadTenants })(TenantComponent);
+export default connect(mapStateToProps, { loadTenants })(TenantComponent);
