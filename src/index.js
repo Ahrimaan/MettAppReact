@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider, connect } from 'react-redux';
+import { Provider } from 'react-redux';
 import { Container } from 'semantic-ui-react';
-import { ConnectedRouter, routerReducer, routerMiddleware } from 'react-router-redux'
+import { BrowserRouter } from 'react-router-dom'
 import { Switch } from 'react-router';
 import { history, store } from './store';
 import { initializeApp } from 'firebase/app';
@@ -17,13 +17,13 @@ initializeApp(config.firebaseData);
 
 ReactDOM.render(
   <Provider store={store}>
-    <ConnectedRouter history={history}>
+    <BrowserRouter>
       <Container >
         <LoaderComponent />
         <HeaderComponent />
         <Switch children={appRoutes}>
         </Switch>
       </Container>
-    </ConnectedRouter>
+    </BrowserRouter>
   </Provider>
   , document.querySelector('.application'));

@@ -21,7 +21,6 @@
     "chai-jquery": "*",
     "clean-webpack-plugin": "*",
     "html-webpack-plugin": "*",
-    "jquery": "*",
     "jsdom": "*",
     "mocha": "*",
     "react-addons-test-utils": "*",
@@ -44,11 +43,9 @@
     "react-redux": "*",
     "react-router": "*",
     "react-router-dom": "*",
-    "react-router-redux": "~4.0.8",
     "redux": "*",
     "redux-logger": "*",
     "redux-promise": "*",
-    "redux-thunk": "*",
     "semantic-ui": "*",
     "semantic-ui-react": "*"
   }

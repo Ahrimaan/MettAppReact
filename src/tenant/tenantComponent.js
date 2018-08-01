@@ -1,17 +1,10 @@
 import React, { Component } from 'react';
-import PropTypes from "prop-types"
 import { connect } from 'react-redux';
 import { Button, Modal, Dropdown } from 'semantic-ui-react'
 import _ from 'lodash';
-import { loadTenants } from './actions';
+import { loadTenants, updateTenant } from './actions';
 
 class TenantComponent extends Component {
-    static propTypes = {
-        loadTenants: PropTypes.func.isRequired,
-        app: PropTypes.object,
-        tenant: PropTypes.object
-    }
-
     constructor(props) {
         super(props);
         this.state = { selectedItem: "", showDialog: true }
@@ -60,11 +53,7 @@ class TenantComponent extends Component {
     }
 
     handleSave() {
-        this.props.updateTenantId(this.state.selectedItem, res => {
-            if (res) {
-                this.setState({ showDialog: false })
-            }
-        });
+        this.props.updateTenant(this.state.selectedItem);
     }
 
     renderSelectList(tenantList) {
@@ -91,4 +80,4 @@ function mapStateToProps(props) {
     return newProps;
 }
 
-export default connect(mapStateToProps, { loadTenants })(TenantComponent);
+export default connect(mapStateToProps, { loadTenants, updateTenant })(TenantComponent);

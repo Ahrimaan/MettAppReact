@@ -1,1 +1,2 @@
 export const TENANTS_LOADED = '@@TENANT/TENANTS_LOADED';
+export const TENANT_SET ='@@TENATN/TENANT_SET';
