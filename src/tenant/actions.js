@@ -1,32 +1,34 @@
-import { TENANTS_LOADED } from './actionTypes';
-import { firestore, auth } from 'firebase';
-import 'firebase/firestore';
+import { TENANTS_LOADED, TENANT_SET, TENANT_USER_LOADED } from './actionTypes';
+import { auth } from 'firebase';
+import { getAllTenants, setUserTenant, getUserTenant } from './tenantService';
 
 export function loadTenants() {
     return (dispatch) => {
-        firestore().collection('tenants').get().then(result => {
-            let data = [];
-            result.forEach(doc => {
-                data.push({id:doc.id , name: doc.data().name });
-            });
-            dispatch({ type: TENANTS_LOADED, payload: data })
-        }, err => {
-            //TODO: Error with notifictaion
+        getAllTenants().then(result => {
+            dispatch({ type: TENANTS_LOADED, payload: result })
+        }).catch(err => {
             console.log(err);
         })
     };
 }
 
 export function updateTenant(tenantid) {
-        firestore().collection('tenants').doc(tenantid).get().then(result => {
-            firestore().collection('user').doc(auth().currentUser.uid).set({ tenant: result.ref }).then(result => {
-                return {type: TENANT_SET, payload:tenantid };
-            }).catch(err => {
-                //TODO: Error with notifictaion
-                console.log(err);
-            });
-        }).catch(err => {
-            //TODO: Error with notifictaion
-            console.log(err);
-        });
+    return (dispatch) => {
+        setUserTenant(auth().currentUser.uid,tenantid).then(result => {
+            dispatch({ type: TENANT_SET, payload: result });
+        }).catch(error => {
+            console.log(error);
+        })
+    }
 } 
+
+export function fetchUserTenant(userId) {
+    return (dispatch) => {
+        getUserTenant(userId).then(result => {
+            dispatch({type: TENANT_USER_LOADED, payload: result});
+        }).catch(err => {
+
+        });
+        
+    }
+}

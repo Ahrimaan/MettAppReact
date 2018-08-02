@@ -4,12 +4,10 @@ import {
     LOGOUT,
     USERINFORMATION_UPDATED,
     USERINFORMATION_UPDATED_FAILED,
-    LOADING,
-    LOADING_FINISHED
 } from './actionTypes';
 
 import { auth } from 'firebase';
-import { push  } from 'react-router-redux';
+import { fetchUserTenant } from '../tenant';
 
 export function loginWithGoogle() {   
     return (dispatch) => {
@@ -39,11 +37,10 @@ export function subscribeUserEvent() {
     return (dispatch) => {
         auth().onAuthStateChanged(result => {
             if(result){
+                dispatch(fetchUserTenant(result.uid));
                 dispatch({type: LOGIN, payload: result});
-                dispatch(push('/tenant'));
             } else{
                 dispatch({type: LOGOUT});
-                dispatch(push('/login'));
             }
         }, err => {
             dispatch({ type: LOGIN_FAILURE, payload :err});
@@ -55,6 +52,5 @@ export function subscribeUserEvent() {
 export function logoutCurrentUser() {
     return (dispatch) => {
         auth().signOut();
-        push('/login');
     }
 }

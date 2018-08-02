@@ -1,14 +1,23 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, Modal, Dropdown } from 'semantic-ui-react'
-import _ from 'lodash';
 import { loadTenants, updateTenant } from './actions';
+import { isNullOrUndefined } from 'util';
 
 class TenantComponent extends Component {
     constructor(props) {
         super(props);
-        this.state = { selectedItem: "", showDialog: true }
+        this.state = { selectedItem: "" }
         this.props.loadTenants();
+    }
+
+    componentWillReceiveProps(nextprops) {
+        this.setState({ showDialog: isNullOrUndefined(nextprops.tenant.selectedTenant)});
+    }
+
+
+    componentDidMount() {
+        this.state = { selectedItem: "", showDialog: isNullOrUndefined(this.props.tenant.selectedTenant) };
     }
 
     handleChange(event, { value }) {
@@ -18,6 +27,10 @@ class TenantComponent extends Component {
     render() {
         const { tenantList } = this.props.tenant;
         const { app } = this.props;
+
+        if (!app.user) {
+            return null;
+        }
 
         return (
             <Modal

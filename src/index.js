@@ -9,6 +9,8 @@ import { initializeApp } from 'firebase/app';
 // Import Components
 import { HeaderComponent } from './headerbar';
 import { LoaderComponent } from './shared';
+import { TenantDialogComponent } from './tenant';
+
 import config from './config';
 import appRoutes from './appRoutes';
 
@@ -21,6 +23,7 @@ ReactDOM.render(
       <Container >
         <LoaderComponent />
         <HeaderComponent />
+        <TenantDialogComponent/>
         <Switch children={appRoutes}>
         </Switch>
       </Container>
