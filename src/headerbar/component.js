@@ -23,15 +23,13 @@ class HeaderComponent extends Component {
         .logoutCurrentUser();
 
     renderAdminLink() {
-        if (this.props.app.user) {
-            if (this.props.app.user.isAdmin) {
+            if (this.props.app.user &&this.props.app.user.isAdmin) {
                 return (
                     <Menu.Item name='Admin' as={Link} to='/admin' >
 
                     </Menu.Item>
                 );
             }
-        }
     }
 
     render() {

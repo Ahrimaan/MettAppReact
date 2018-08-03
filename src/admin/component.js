@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Button, Modal, Input, Label} from 'semantic-ui-react'
-import {updatePaypalLink} from './action';
+import {updatePaypalLinkAndUserdata} from './action';
 import { withRouter  } from 'react-router-dom'
 import _ from 'lodash'
 
@@ -47,7 +47,7 @@ class AdminComponent extends Component {
     handleSave() {
         this
             .props
-            .updateLink(this.state.linkPrefix + this.state.link);
+            .updatePaypalLinkAndUserdata(this.state.linkPrefix + this.state.link);
     }
 
     closeDialog = () => {
@@ -86,16 +86,8 @@ class AdminComponent extends Component {
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        updateLink: link => {
-            dispatch(updatePaypalLink(link))
-        }
-    }
-}
-
 function mapStateToProps(props) {
     return {app: props.app, admin: props.admin}
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AdminComponent));
+export default withRouter(connect(mapStateToProps, {updatePaypalLinkAndUserdata})(AdminComponent));

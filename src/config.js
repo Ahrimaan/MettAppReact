@@ -13,5 +13,6 @@ export default
         },
         "TenantCollectionName": "tenants",
         "UserCollectionName": "user",
-        "AdminCollectionName": "admin"
+        "AdminCollectionName": "admin",
+        "AppointmentCollectionName": "events"
     }

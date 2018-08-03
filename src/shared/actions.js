@@ -39,7 +39,7 @@ export function subscribeUserEvent() {
                     dispatch(getAdminInformation())
                 ]).then(res => {
                     dispatch({type: LOGIN_COMPLETED});
-                    dispatch(push('/'));
+                    dispatch(push('/home'));
                 });
             } else {
                 dispatch({ type: LOGOUT });

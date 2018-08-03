@@ -1,9 +1,20 @@
-import { APPOINTMENT_ADD,APPOINTMENT_ADDED } from './action-types';
-import {addAppointment} from './appointmentService';
+import { APPOINTMENT_ADD, APPOINTMENT_ADDED } from './action-types';
+import { firestore, auth } from 'firebase';
+import config from '../config';
 
-export function addApointment(appointmentData) {
-        dispatch({type:APPOINTMENT_ADD, payload: promise});
-        let promise = addAppointment(appointmentData).then(result => {
-            dispatch({type:APPOINTMENT_ADDED, payload: result});
-        });     
+export function addApointment(appointmentData, tenantid) {
+    return (dispatch) => {
+        dispatch({ type: APPOINTMENT_ADD });
+        return new Promise((resolve, reject) => {
+            firestore().collection(config.AdminCollectionName).doc(auth().currentUser.uid).get().then(result => {
+                let data = Object.assign({}, appointmentData, { admin: result.ref, tenant: result.data().tenantId });
+                firestore().collection(config.AppointmentCollectionName).add(data).then(result => {
+                    resolve(Object.assign({}, appointmentData, { id: result.id }));
+                    dispatch({ type: APPOINTMENT_ADDED, payload: appointmentData });
+                }).catch(err => {
+                    reject(err);
+                });
+            })
+        });
+    }
 }

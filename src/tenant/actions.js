@@ -18,7 +18,7 @@ export function loadTenants() {
 export function updateTenant(tenantid) {
     return (dispatch) => {
         dispatch({ type: LOADING });
-        setUserTenant(auth().currentUser.uid, tenantid).then(result => {
+        setUserTenant(auth().currentUser, tenantid).then(result => {
             dispatch({ type: TENANT_SET, payload: result });
             dispatch(push('/'));
         }).catch(error => {
@@ -28,7 +28,6 @@ export function updateTenant(tenantid) {
 }
 
 export function fetchUserTenant() {
-
     return (dispatch) => {
         return new Promise((resolve, reject) => {
             dispatch({ type: LOADING });

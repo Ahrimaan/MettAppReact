@@ -19,10 +19,10 @@ export function getAllTenants() {
 
 }
 
-export function setUserTenant(userid, tenantid) {
+export function setUserTenant(user, tenantid) {
     return new Promise((resolve, reject) => {
         firestore().collection(config.TenantCollectionName).doc(tenantid).get().then(result => {
-            firestore().collection(config.UserCollectionName).doc(userid).set({ tenant: result.ref }).then(result => {
+            firestore().collection(config.UserCollectionName).doc(user.uid).set({ tenant: result.ref, user: user }).then(result => {
                 resolve(tenantid);
             }).catch(err => {
                 reject(err);
@@ -38,11 +38,14 @@ export function setUserTenant(userid, tenantid) {
 
 export function getUserTenant(userID){
     return new Promise((resolve, reject) => {
-        firestore().collection(config.UserCollectionName).doc(userID).get().then(result => {
-            resolve(result.data().tenant.id);
-        }).catch(err => {
-            reject(err);
+        firestore().collection(config.AdminCollectionName).doc(userID).get().then(result => {
+            resolve(result.data().tenantId.id)
+        }).catch(adminErr => {
+            firestore().collection(config.UserCollectionName).doc(userID).get().then(result => {
+                resolve(result.data().tenant.id);
+            }).catch(err => {
+                reject(err);
+            });
         });
-    })
-
+    });
 }

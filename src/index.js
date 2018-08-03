@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { Container } from 'semantic-ui-react';
+import { Container, Sticky } from 'semantic-ui-react';
 import { Switch } from 'react-router';
 import { history, store } from './store';
 import { ConnectedRouter } from 'connected-react-router';
@@ -25,7 +25,10 @@ ReactDOM.render(
       <ConnectedRouter history={history}>
         <React.Fragment>
           <LoaderComponent />
-          <HeaderComponent />
+          <Sticky>
+            <HeaderComponent />
+          </Sticky>
+
           <Switch children={appRoutes}>
           </Switch>
         </React.Fragment>
