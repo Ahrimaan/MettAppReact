@@ -1,7 +1,8 @@
 import {
     LOGOUT,
     LOADING,
-    LOGIN,
+    LOGGEDIN,
+    LOGIN_COMPLETED,
     USERINFORMATION_FETCHED
 } from './actionTypes';
 
@@ -11,13 +12,13 @@ const initialState = { loading: false };
 
 export default function (state = initialState, action) {
     switch (action.type) {
-        case LOGIN:{
+        case LOGGEDIN:{
             if (action.payload) {
                 let user = {};
                 user.displayName = action.payload.displayName;
                 user.email = action.payload.email;
                 user.picture = action.payload.photoURL ? action.payload.photoURL : null;
-                return Object.assign({},state,{ user: user , loading:false } );
+                return Object.assign({},state,{ user: user} );
             }
             return state;
         }
@@ -26,6 +27,9 @@ export default function (state = initialState, action) {
             newState.loading = false;
             Object.assign(newState.user,action.payload);
             return newState;
+        }
+        case LOGIN_COMPLETED: {
+            return Object.assign({},state, { loading: false });
         }
         case LOADING: {
             return Object.assign({}, { loading: true });

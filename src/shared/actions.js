@@ -1,19 +1,20 @@
 import {
-    LOGIN,
+    LOGGEDIN,
     LOGIN_FAILURE,
+    LOGIN_COMPLETED,
     LOGOUT,
     USERINFORMATION_FETCHED,
     LOADING
-    
+
 } from './actionTypes';
 import { push } from 'connected-react-router';
 import { auth, firestore } from 'firebase';
 import { fetchUserTenant } from '../tenant';
 import config from '../config';
 
-export function loginWithGoogle() {   
+export function loginWithGoogle() {
     return (dispatch) => {
-        dispatch({type: LOADING});
+        dispatch({ type: LOADING });
         subscribeUserEvent();
         auth().signInWithPopup(new auth.GoogleAuthProvider());
     }
@@ -21,37 +22,44 @@ export function loginWithGoogle() {
 
 export function loginWithCredentials(username, password) {
     return (dispatch) => {
-        dispatch({type: LOADING});
+        dispatch({ type: LOADING });
         subscribeUserEvent();
-        auth().signInWithEmailAndPassword(username,password);
+        auth().signInWithEmailAndPassword(username, password);
     }
 }
 
 export function subscribeUserEvent() {
     return (dispatch) => {
-        dispatch({type: LOADING});
+        dispatch({ type: LOADING });
         auth().onAuthStateChanged(result => {
-            if(result){
-                dispatch(fetchUserTenant(result.uid));
-                dispatch({type: LOGIN, payload: result});
-                dispatch(getAdminInformation());
-                dispatch(push('/'));
-            } else{
-                dispatch({type: LOGOUT});
+            if (result) {
+                dispatch({ type: LOGGEDIN, payload: result });
+                Promise.all([
+                    dispatch(fetchUserTenant(result.uid)),
+                    dispatch(getAdminInformation())
+                ]).then(res => {
+                    dispatch({type: LOGIN_COMPLETED});
+                    dispatch(push('/'));
+                });
+            } else {
+                dispatch({ type: LOGOUT });
                 dispatch(push('/login'));
             }
         }, err => {
-            dispatch({ type: LOGIN_FAILURE, payload :err});
+            dispatch({ type: LOGIN_FAILURE, payload: err });
         });
     }
 }
 
 export function getAdminInformation() {
     return (dispatch) => {
-        firestore().collection(config.AdminCollectionName).doc(auth().currentUser.uid).get().then(result => {
-            let data = result.data();
-            let paypalLink = data.paypalLink ? data.paypalLink : null;
-            dispatch({type: USERINFORMATION_FETCHED, payload: { isAdmin: true , paypalLink:  paypalLink } });
+        return new Promise((resolve, reject) => {
+            firestore().collection(config.AdminCollectionName).doc(auth().currentUser.uid).get().then(result => {
+                let data = result.data();
+                let paypalLink = data.paypalLink ? data.paypalLink : null;
+                dispatch({ type: USERINFORMATION_FETCHED, payload: { isAdmin: true, paypalLink: paypalLink } });
+                resolve();
+            });
         });
     }
 }
