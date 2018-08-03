@@ -25,10 +25,10 @@ class TenantComponent extends Component {
     };
 
     render() {
-        const { tenantList } = this.props.tenant;
+        const { tenantList, loading } = this.props.tenant;
         const { app } = this.props;
 
-        if (!app.user) {
+        if (!app.user || loading) {
             return null;
         }
 

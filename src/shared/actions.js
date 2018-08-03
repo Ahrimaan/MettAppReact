@@ -38,6 +38,7 @@ export function subscribeUserEvent() {
         auth().onAuthStateChanged(result => {
             if(result){
                 dispatch(fetchUserTenant(result.uid));
+                //TODO: Load Admin Data
                 dispatch({type: LOGIN, payload: result});
             } else{
                 dispatch({type: LOGOUT});
