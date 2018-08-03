@@ -2,9 +2,9 @@ import {
     LOGIN,
     LOGIN_FAILURE,
     LOGOUT,
-    USERINFORMATION_UPDATED,
-    USERINFORMATION_UPDATED_FAILED,
-    USERINFORMATION_FETCHED
+    USERINFORMATION_FETCHED,
+    LOADING
+    
 } from './actionTypes';
 import { push } from 'connected-react-router';
 import { auth, firestore } from 'firebase';
@@ -13,6 +13,7 @@ import config from '../config';
 
 export function loginWithGoogle() {   
     return (dispatch) => {
+        dispatch({type: LOADING});
         subscribeUserEvent();
         auth().signInWithPopup(new auth.GoogleAuthProvider());
     }
@@ -20,6 +21,7 @@ export function loginWithGoogle() {
 
 export function loginWithCredentials(username, password) {
     return (dispatch) => {
+        dispatch({type: LOADING});
         subscribeUserEvent();
         auth().signInWithEmailAndPassword(username,password);
     }
@@ -27,6 +29,7 @@ export function loginWithCredentials(username, password) {
 
 export function subscribeUserEvent() {
     return (dispatch) => {
+        dispatch({type: LOADING});
         auth().onAuthStateChanged(result => {
             if(result){
                 dispatch(fetchUserTenant(result.uid));

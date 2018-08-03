@@ -23,7 +23,7 @@ class LoginFormComponent extends Component {
                 <Divider horizontal>Or</Divider>
                 <Grid.Row>
                     <Grid.Column>
-                        <Button size='large' color='google plus' onClick={ loginWithGoogle() }>
+                        <Button size='large' color='google plus' onClick={ this.props.loginWithGoogle }>
                             <Icon name='google' /> Google
                          </Button>
                     </Grid.Column>
@@ -35,8 +35,8 @@ class LoginFormComponent extends Component {
 
 function mapStateToProps(props) {
     return {
-        error: props.error
+        app: props.app
     }
 }
 
-export default connect(null, { loginWithGoogle, loginWithCredentials })(LoginFormComponent);
+export default connect(mapStateToProps, { loginWithGoogle, loginWithCredentials })(LoginFormComponent);

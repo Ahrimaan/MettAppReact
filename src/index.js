@@ -26,7 +26,6 @@ ReactDOM.render(
         <React.Fragment>
           <LoaderComponent />
           <HeaderComponent />
-          <TenantDialogComponent />
           <Switch children={appRoutes}>
           </Switch>
         </React.Fragment>

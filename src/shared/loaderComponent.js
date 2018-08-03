@@ -8,10 +8,13 @@ class LoaderComponent extends Component {
         this.state = {loading:false};
     }
     
-    componentWillReceiveProps(props) {
-        if(props.app){
-            this.setState({loading: this.props.app.loading})
-        }        
+    componentWillReceiveProps(nextprops) {
+        if(nextprops.app){
+            this.setState({loading: nextprops.app.loading})
+        }       
+        else {
+            tnis.setState({loading:false});
+        } 
     }
 
     render() {

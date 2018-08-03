@@ -7,17 +7,9 @@ import { isNullOrUndefined } from 'util';
 class TenantComponent extends Component {
     constructor(props) {
         super(props);
-        this.state = { selectedItem: "" }
+        this.state = { selectedItem: "" } 
+        this.state = { selectedItem: "", showDialog: true };
         this.props.loadTenants();
-    }
-
-    componentWillReceiveProps(nextprops) {
-        this.setState({ showDialog: isNullOrUndefined(nextprops.tenant.selectedTenant)});
-    }
-
-
-    componentDidMount() {
-        this.state = { selectedItem: "", showDialog: isNullOrUndefined(this.props.tenant.selectedTenant) };
     }
 
     handleChange(event, { value }) {
@@ -31,7 +23,7 @@ class TenantComponent extends Component {
         if (!app.user || loading) {
             return null;
         }
-
+       
         return (
             <Modal
                 closeOnDimmerClick={false}
