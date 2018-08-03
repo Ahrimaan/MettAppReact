@@ -23,7 +23,7 @@ class AdminComponent extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.app.user.paypalLink) {
+        if (nextProps.app.user.paypalLink && !nextProps.admin.loading) {
             this.setState({link: this.getPaypalLink(nextProps.app.user.paypalLink)})
         }
         this.setState({loading: nextProps.admin.loading})
