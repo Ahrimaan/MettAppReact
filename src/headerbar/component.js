@@ -3,8 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import AccountMenu from './accountMenu';
 import { subscribeUserEvent, logoutCurrentUser } from '../shared';
-import { Input, Menu, Header } from 'semantic-ui-react'
-import Button from 'semantic-ui-react/dist/commonjs/elements/Button/Button';
+import { Menu, Header } from 'semantic-ui-react'
 
 class HeaderComponent extends Component {
     componentWillMount() {

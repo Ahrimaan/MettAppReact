@@ -1,11 +1,10 @@
-export { default as appReducer } from './reducer';
+export { default as AppReducer } from './reducer';
 export {
-    subscribeUserEvent,
-    hideLoading,
     logoutCurrentUser,
-    showLoading,
     loginWithCredentials,
     loginWithGoogle,
-    updatePaypalLink,
-    updateTenantId } from './actions';
+    updateTenantId,
+    subscribeUserEvent,
+    getAdminInformation
+ } from './actions';
 export { default as LoaderComponent } from './loaderComponent';

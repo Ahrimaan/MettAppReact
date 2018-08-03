@@ -1,13 +1,14 @@
 import {combineReducers} from 'redux';
-import {AppStateReducer} from './shared';
+import { AdminReducer } from './admin';
 import {AppointmentReducer} from './appointment';
 import {TenantReducer} from './tenant';
-import { appReducer } from './shared';
+import { AppReducer } from './shared';
 
 const rootReducer = combineReducers({
   appointment: AppointmentReducer,
   tenant:TenantReducer,
-  app: appReducer
+  app: AppReducer,
+  admin: AdminReducer
 });
 
 export default rootReducer;

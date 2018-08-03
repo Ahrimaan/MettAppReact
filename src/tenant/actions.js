@@ -24,10 +24,10 @@ export function updateTenant(tenantid) {
     }
 } 
 
-export function fetchUserTenant(userId) {
+export function fetchUserTenant() {
     return (dispatch) => {
         dispatch({type: LOADING});
-        getUserTenant(userId).then(result => {
+        getUserTenant(auth().currentUser.uid).then(result => {
             dispatch({type: TENANT_USER_LOADED, payload: result});
         }).catch(err => {
 

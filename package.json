@@ -32,6 +32,7 @@
   "dependencies": {
     "axios": "*",
     "babel-preset-stage-1": "*",
+    "connected-react-router": "^4.3.0",
     "firebase": "^4.12.1",
     "history": "*",
     "lodash": "*",
@@ -45,7 +46,6 @@
     "react-router-dom": "*",
     "redux": "*",
     "redux-logger": "*",
-    "redux-promise": "*",
     "redux-thunk": "2.3.0",
     "semantic-ui": "*",
     "semantic-ui-react": "*"

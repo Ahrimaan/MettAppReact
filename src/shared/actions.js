@@ -4,10 +4,12 @@ import {
     LOGOUT,
     USERINFORMATION_UPDATED,
     USERINFORMATION_UPDATED_FAILED,
+    USERINFORMATION_FETCHED
 } from './actionTypes';
-
-import { auth } from 'firebase';
+import { push } from 'connected-react-router';
+import { auth, firestore } from 'firebase';
 import { fetchUserTenant } from '../tenant';
+import config from '../config';
 
 export function loginWithGoogle() {   
     return (dispatch) => {
@@ -23,30 +25,31 @@ export function loginWithCredentials(username, password) {
     }
 }
 
-export function updatePaypalLink(paypalLink) {
-    return (dispatch) => {
-        paypalUpdate(paypalLink).then(result => {
-            dispatch({ type:USERINFORMATION_UPDATED , payload: { paypalLink: paypalLink } });
-        }).catch(err => {
-            dispatch({type: USERINFORMATION_UPDATED_FAILED});
-        })
-    }
-}
-
 export function subscribeUserEvent() {
     return (dispatch) => {
         auth().onAuthStateChanged(result => {
             if(result){
                 dispatch(fetchUserTenant(result.uid));
-                //TODO: Load Admin Data
                 dispatch({type: LOGIN, payload: result});
+                dispatch(getAdminInformation());
+                dispatch(push('/'));
             } else{
                 dispatch({type: LOGOUT});
+                dispatch(push('/login'));
             }
         }, err => {
             dispatch({ type: LOGIN_FAILURE, payload :err});
         });
+    }
+}
 
+export function getAdminInformation() {
+    return (dispatch) => {
+        firestore().collection(config.AdminCollectionName).doc(auth().currentUser.uid).get().then(result => {
+            let data = result.data();
+            let paypalLink = data.paypalLink ? data.paypalLink : null;
+            dispatch({type: USERINFORMATION_FETCHED, payload: { isAdmin: true , paypalLink:  paypalLink } });
+        });
     }
 }
 

@@ -12,5 +12,6 @@ export default
             messagingSenderId: "367004575386"
         },
         "TenantCollectionName": "tenants",
-        "UserCollectionName": "user"
+        "UserCollectionName": "user",
+        "AdminCollectionName": "admin"
     }

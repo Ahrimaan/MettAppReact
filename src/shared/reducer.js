@@ -1,10 +1,9 @@
 import {
-    LOGIN_SUCCESS, CURRENT_USER, LOGOUT,
-    USERINFORMATION_UPDATED,
-    USERINFORMATION_UPDATED_FAILED,
+    LOGOUT,
     LOADING,
     LOADING_FINISHED,
-    LOGIN
+    LOGIN,
+    USERINFORMATION_FETCHED
 } from './actionTypes';
 
 import _ from 'lodash';
@@ -23,6 +22,11 @@ export default function (state = initialState, action) {
                 return Object.assign({},state,{ user: user } );
             }
             return state;
+        }
+        case USERINFORMATION_FETCHED: {
+            let newState = _.cloneDeep(state);
+            Object.assign(newState.user,action.payload);
+            return newState;
         }
         case LOADING: {
             return Object.assign({}, state, { loading: true });
