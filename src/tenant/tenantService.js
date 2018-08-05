@@ -1,4 +1,4 @@
-import { firestore } from 'firebase';
+import { firestore,auth } from 'firebase';
 import 'firebase/firestore';
 import config from '../config';
 
@@ -19,14 +19,14 @@ export function getAllTenants() {
 
 }
 
-export function setUserTenant(user, tenantid) {
+export function setUserTenant(tenantid) {
     return new Promise((resolve, reject) => {
         firestore().collection(config.TenantCollectionName).doc(tenantid).get().then(result => {
-            firestore().collection(config.UserCollectionName).doc(user.uid).set({ tenant: result.ref, user: user }).then(result => {
+            let userData = {displayName: auth().currentUser.displayName , email: auth().currentUser.email};
+            firestore().collection(config.UserCollectionName).doc(user.uid).set({ tenant: result.ref, userData }).then(result => {
                 resolve(tenantid);
             }).catch(err => {
                 reject(err);
-                //TODO: Error with notifictaion
                 console.log(err);
             });
         }).catch(err => {

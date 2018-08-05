@@ -52,7 +52,7 @@ class AdminComponent extends Component {
 
     closeDialog = () => {
         this.setState({ show:false})
-        this.props.history.push('/');
+        this.props.history.push('/home');
     }
 
     renderModal() {

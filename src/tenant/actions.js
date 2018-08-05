@@ -18,7 +18,7 @@ export function loadTenants() {
 export function updateTenant(tenantid) {
     return (dispatch) => {
         dispatch({ type: LOADING });
-        setUserTenant(auth().currentUser, tenantid).then(result => {
+        setUserTenant(tenantid).then(result => {
             dispatch({ type: TENANT_SET, payload: result });
             dispatch(push('/'));
         }).catch(error => {

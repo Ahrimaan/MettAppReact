@@ -4,7 +4,9 @@ import {
     LOGIN_COMPLETED,
     LOGOUT,
     USERINFORMATION_FETCHED,
-    LOADING
+    LOADING,
+    SHOW_LOADER,
+    HIDE_LOADER
 
 } from './actionTypes';
 import { push } from 'connected-react-router';

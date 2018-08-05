@@ -78,6 +78,6 @@ export default class AppointmentCreateComponent extends Component {
     }
 
     createItem() {
-        this.props.onItemCreate({date: this.state.date.toString() , allowPaypal: this.state.allowPaypal});
+        this.props.onItemCreate({date: new Date(this.state.date), allowPaypal: this.state.allowPaypal});
     }
 }

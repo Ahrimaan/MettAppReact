@@ -25,10 +25,7 @@ ReactDOM.render(
       <ConnectedRouter history={history}>
         <React.Fragment>
           <LoaderComponent />
-          <Sticky>
-            <HeaderComponent />
-          </Sticky>
-
+          <HeaderComponent />
           <Switch children={appRoutes}>
           </Switch>
         </React.Fragment>

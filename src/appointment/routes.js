@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import component from './appointment-list/list';
+import component from './appointment-list/container';
 
 const appointmentRoutes = [
     <Route path="/home" component={component} />,

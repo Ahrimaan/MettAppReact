@@ -3,7 +3,9 @@ import {
     LOADING,
     LOGGEDIN,
     LOGIN_COMPLETED,
-    USERINFORMATION_FETCHED
+    USERINFORMATION_FETCHED,
+    HIDE_LOADER,
+    SHOW_LOADER
 } from './actionTypes';
 
 import _ from 'lodash';
@@ -36,6 +38,16 @@ export default function (state = initialState, action) {
         }
         case LOGOUT: {
             return initialState;
+        }
+        case SHOW_LOADER: {
+            let newstate = _.cloneDeep(state);
+            newstate.loading = true;
+            return newstate;
+        }
+        case HIDE_LOADER: {
+            let newstate = _.cloneDeep(state);
+            newstate.loading = false;
+            return newstate;
         }
         default:
             return state ? state : null;
