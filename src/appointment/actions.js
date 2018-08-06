@@ -14,8 +14,9 @@ export function addApointment(appointmentData, tenantid) {
                 let data = Object.assign({}, appointmentData,
                      { admin: admin.ref, tenant: tenantid }, adminData);
                 firestore().collection(config.AppointmentCollectionName).add(data).then(result => {
-                    resolve(Object.assign({}, appointmentData, { id: result.id }));
-                    dispatch({ type: APPOINTMENT_ADDED, payload: appointmentData });
+                    let newData = Object.assign({}, appointmentData, { id: result.id });
+                    resolve(newData);
+                    dispatch({ type: APPOINTMENT_ADDED, payload: newData });
                 }).catch(err => {
                     reject(err);
                 });

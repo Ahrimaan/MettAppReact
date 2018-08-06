@@ -37,7 +37,7 @@ class AppointmentList extends Component {
                         show={this.state.showCreateDialog}
                         onItemCreate={this.onEventCreate}
                         loading={this.state.createEventLoading} />
-                    <EventItemList items={ this.props.appointment.events } />
+                    <EventItemList items={ this.props.appointment.events }  userid={this.props.app.user.id } />
                     
                 </div>
             )

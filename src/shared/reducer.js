@@ -20,6 +20,7 @@ export default function (state = initialState, action) {
                 user.displayName = action.payload.displayName;
                 user.email = action.payload.email;
                 user.picture = action.payload.photoURL ? action.payload.photoURL : null;
+                user.id =  action.payload.uid;
                 return Object.assign({},state,{ user: user} );
             }
             return state;

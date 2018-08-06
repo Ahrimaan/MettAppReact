@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Modal, Form, Checkbox,Da } from 'semantic-ui-react'
+import { Button, Modal, Form, Checkbox } from 'semantic-ui-react'
 import moment from 'moment';
 import DatetimePicker from 'react-semantic-datetime';
 moment.locale('de');
