@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { addApointment, getAllEvents, deleteEvent } from '../actions';
 import { Button, Modal, Icon } from 'semantic-ui-react';
 import CreateAppointmentComponent from '../appointment-create/component';
+import AppointmentDetail from './subscribe-modal';
 import EventItemList from './itemList';
 import { isNullOrUndefined } from 'util';
 
@@ -11,13 +12,17 @@ class AppointmentList extends Component {
         super(props);
         this.state = {
             showCreateDialog: false,
-            createEventLoading: false
+            createEventLoading: false,
+            showDeleteDialog: false,
+            showSubscribe: false,
+            showUnscribe:false
         };
         this.handleAddButtonClick = this
             .handleAddButtonClick
             .bind(this);
         this.onDelete = this.onDelete.bind(this);
         this.onUnscribe = this.onUnscribe.bind(this);
+        this.openSubscribeDialog = this.openSubscribeDialog.bind(this);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -47,8 +52,10 @@ class AppointmentList extends Component {
                         isAdmin={this.props.app.user.isAdmin}
                         onDelete={this.onDelete}
                         onUnscribe={this.onUnscribe}
+                        onSubscribe={this.openSubscribeDialog}
                     />
                     {this.renderDeleteModal()}
+                    {this.renderUnscribeModal()}
                 </div>
             )
 
@@ -58,11 +65,15 @@ class AppointmentList extends Component {
     }
 
     onDelete(id) {
-        this.setState({ showDialog: true, selectedEventId: id });
+        this.setState({ showDeleteDialog: true, selectedEventId: id });
     }
 
     onUnscribe(id) {
         console.log('Unscribe', id);
+    }
+
+    openSubscribeDialog = (id) => {
+        this.setState({ showSubscribe: true, selectedEventId: id});
     }
 
     renderDeleteModal() {
@@ -71,7 +82,7 @@ class AppointmentList extends Component {
                 closeOnDimmerClick={false}
                 closeOnDocumentClick={false}
                 size='mini'
-                open={this.state.showDialog}>
+                open={this.state.showDeleteDialog}>
                 <Modal.Header>
                     Confirm Delete
                 </Modal.Header>
@@ -79,9 +90,34 @@ class AppointmentList extends Component {
                     <Button.Group>
                         <Button positive icon onClick={() => {
                             this.props.deleteEvent(this.state.selectedEventId).then(res => {
-                                this.setState({showDialog:false, selectedEventId:null});
+                                this.setState({ showDeleteDialog: false, selectedEventId: null });
                             });
                         }}>
+                            <Icon name='checkmark' />
+                        </Button>
+                        <Button.Or />
+                        <Button negative icon onClick={() => { this.setState({ showDeleteDialog: false }) }}>
+                            <Icon name='cancel' />
+                        </Button>
+                    </Button.Group>
+                </Modal.Actions>
+            </Modal>
+        );
+    }
+
+    renderUnscribeModal() {
+        return (
+            <Modal
+                closeOnDimmerClick={false}
+                closeOnDocumentClick={false}
+                size='mini'
+                open={this.state.showUnscribe}>
+                <Modal.Header>
+                    Really want to unscribe ?
+                </Modal.Header>
+                <Modal.Actions>
+                    <Button.Group>
+                        <Button positive icon>
                             <Icon name='checkmark' />
                         </Button>
                         <Button.Or />
