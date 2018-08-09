@@ -54,10 +54,14 @@ export function getAllEvents(selectedTenant) {
 
 export function deleteEvent(id) {
     return (dispatch) => {
-        firestore().collection(config.AppointmentCollectionName).doc(id).delete().then(result  => {
-            dispatch({type: APPOINTMENT_DELETED, payload: id});
-        }).catch(err => {
-            console.log(err);
+        return new Promise((resolve,reject) => {
+            firestore().collection(config.AppointmentCollectionName).doc(id).delete().then(result  => {
+                dispatch({type: APPOINTMENT_DELETED, payload: id});
+                resolve(id);
+            }).catch(err => {
+                console.log(err);
+                reject(err);
+            });
         })
     }
 }

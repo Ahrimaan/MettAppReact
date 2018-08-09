@@ -1,4 +1,4 @@
-import { FETCHED_DATA, FETCHING_DATA, APPOINTMENT_ADDED } from './action-types';
+import { FETCHED_DATA, FETCHING_DATA, APPOINTMENT_ADDED, De, APPOINTMENT_DELETED } from './action-types';
 
 const initialState = { loading: false };
 
@@ -17,6 +17,11 @@ export default function (state = initialState, action) {
             } else {
                 newState.events = new Array(action.payload);
             }
+            return newState;
+        }
+        case APPOINTMENT_DELETED: {
+            let newState = _.cloneDeep(state);
+            newState.events = newState.events.filter(item => item.id != action.payload );
             return newState;
         }
         default:

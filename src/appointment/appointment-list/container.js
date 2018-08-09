@@ -9,9 +9,10 @@ import { isNullOrUndefined } from 'util';
 class AppointmentList extends Component {
     constructor(props) {
         super(props);
-        this.state = { 
+        this.state = {
             showCreateDialog: false,
-            createEventLoading: false};
+            createEventLoading: false
+        };
         this.handleAddButtonClick = this
             .handleAddButtonClick
             .bind(this);
@@ -41,15 +42,15 @@ class AppointmentList extends Component {
                         show={this.state.showCreateDialog}
                         onItemCreate={this.onEventCreate}
                         loading={this.state.createEventLoading} />
-                    <EventItemList 
-                        items={this.props.appointment.events} 
-                        userid={this.props.app.user.id} 
+                    <EventItemList
+                        items={this.props.appointment.events}
+                        userid={this.props.app.user.id}
                         isAdmin={this.props.app.user.isAdmin}
-                        onDelete={ this.onDelete }
-                        onSubscribe= { this.onSubscribe }
-                        onUnscribe= { this.onUnscribe }
+                        onDelete={this.onDelete}
+                        onSubscribe={this.onSubscribe}
+                        onUnscribe={this.onUnscribe}
                     />
-                    { this.renderDeleteModal() }
+                    {this.renderDeleteModal()}
                 </div>
             )
 
@@ -59,12 +60,12 @@ class AppointmentList extends Component {
     }
 
     onDelete(id) {
-        this.setState({ showDialog:true });
-        console.log('Delete',id);
+        this.setState({ showDialog: true, selectedEventId: id });
+        console.log('Delete', id);
     }
 
     onSubscribe(id) {
-        console.log('Subscribe',id);
+        console.log('Subscribe', id);
     }
 
     onUnscribe(id) {
@@ -82,12 +83,19 @@ class AppointmentList extends Component {
                     Confirm Delete
                 </Modal.Header>
                 <Modal.Actions>
-                    <Button positive icon>
-                        <Icon name='checkmark'/>
-                    </Button>
-                    <Button negative icon onClick={ () => { this.setState({ showDialog:false })}}>
-                        <Icon name='cancel'/>
-                    </Button>
+                    <Button.Group>
+                        <Button positive icon onClick={() => {
+                            this.props.deleteEvent(this.state.selectedEventId).then(res => {
+                                this.setState({showDialog:false});
+                            })
+                        }}>
+                            <Icon name='checkmark' />
+                        </Button>
+                        <Button.Or />
+                        <Button negative icon onClick={() => { this.setState({ showDialog: false }) }}>
+                            <Icon name='cancel' />
+                        </Button>
+                    </Button.Group>
                 </Modal.Actions>
             </Modal>
         );
