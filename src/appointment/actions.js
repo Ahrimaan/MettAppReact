@@ -56,8 +56,9 @@ export function getAllEvents(selectedTenant) {
 export function joinAppointment(id,data) {
     return (dispatch) => {
         firestore().collection(config.AppointmentCollectionName).doc(id).collection('joiner').add(data).then(result => {
-            console.log(result);
-            dispatch({type: JOIN_APPOINTMENT, payload: Object.assign({},{id:id},data) });
+            result.get().then(refResult => {
+                dispatch({type: JOIN_APPOINTMENT, payload: {id:id, data: refResult.data() } });
+            })         
         }).catch(err => {
             console.log(err);
         });

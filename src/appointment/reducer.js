@@ -1,4 +1,4 @@
-import { FETCHED_DATA, FETCHING_DATA, APPOINTMENT_ADDED, De, APPOINTMENT_DELETED } from './action-types';
+import { FETCHED_DATA, FETCHING_DATA, APPOINTMENT_ADDED, De, APPOINTMENT_DELETED, JOIN_APPOINTMENT } from './action-types';
 
 const initialState = { loading: false };
 
@@ -17,6 +17,18 @@ export default function (state = initialState, action) {
             } else {
                 newState.events = new Array(action.payload);
             }
+            return newState;
+        }
+        case JOIN_APPOINTMENT: {
+            let newState = _.cloneDeep(state);
+            let event = newState.events[action.payload.id];
+
+            let collection = [];
+            if(event.joiner) {
+                collection = event.joiner;
+            }
+            collection.add(action.payload.data);
+            newState.events = collection;
             return newState;
         }
         case APPOINTMENT_DELETED: {
