@@ -1,4 +1,10 @@
-import { APPOINTMENT_ADD, APPOINTMENT_ADDED, FETCHING_DATA, FETCHED_DATA } from './action-types';
+import { 
+    APPOINTMENT_ADD,
+    APPOINTMENT_ADDED, 
+    FETCHING_DATA, 
+    FETCHED_DATA,
+    APPOINTMENT_DELETED
+} from './action-types';
 import { firestore, auth } from 'firebase';
 import config from '../config';
 
@@ -31,7 +37,10 @@ export function getAllEvents(selectedTenant) {
         firestore().collection(config.TenantCollectionName).doc(selectedTenant).get().then(tenant => {
             firestore().collection(config.AppointmentCollectionName).where('tenant', '==', tenant.id).get().then(
                 events => {
-                    dispatch({ type: FETCHED_DATA, payload: events.docs.map(event => event.data()) });
+                    dispatch({ type: FETCHED_DATA,
+                         payload: events.docs.map(
+                             event => Object.assign({},event.data(),
+                              {id: event.id }))});
                 }
             ).catch(err => {
                 console.log(err);
@@ -40,5 +49,15 @@ export function getAllEvents(selectedTenant) {
             console.log(err);
         });
 
+    }
+}
+
+export function deleteEvent(id) {
+    return (dispatch) => {
+        firestore().collection(config.AppointmentCollectionName).doc(id).delete().then(result  => {
+            dispatch({type: APPOINTMENT_DELETED, payload: id});
+        }).catch(err => {
+            console.log(err);
+        })
     }
 }
