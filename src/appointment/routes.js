@@ -1,10 +1,11 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import component from './appointment-list/container';
+import listComponent from './appointment-list/container';
+import detailComponent from './appointment-detail/component';
 
 const appointmentRoutes = [
-    <Route path="/home" component={component} />,
-    <Route path="/home/id" component={component} />
+    <Route path="/home/id" component={detailComponent} />,
+    <Route exact path="/home" component={listComponent} />
 ]
 
 export default appointmentRoutes;

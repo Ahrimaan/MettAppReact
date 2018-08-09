@@ -1,5 +1,6 @@
 import React from 'react';
 import { Grid, Card, Button } from 'semantic-ui-react';
+import { Link } from 'react-router-dom'
 import moment from 'moment';
 moment.locale('de');
 
@@ -24,7 +25,7 @@ const EventList = ({ items, userid, isAdmin, onSubscribe, onUnscribe, onDelete }
                                     <Card.Content extra>
                                         <div className='ui two buttons'>
                                             {userid && (
-                                                <Button basic color='green' onClick={() => onSubscribe(item.id)}>
+                                                <Button basic color='green' as={Link} to={ '/home/' + item.id  }>
                                                     Subscribe
                                                     </Button>)
                                             }

@@ -17,7 +17,6 @@ class AppointmentList extends Component {
             .handleAddButtonClick
             .bind(this);
         this.onDelete = this.onDelete.bind(this);
-        this.onSubscribe = this.onSubscribe.bind(this);
         this.onUnscribe = this.onUnscribe.bind(this);
     }
 
@@ -47,7 +46,6 @@ class AppointmentList extends Component {
                         userid={this.props.app.user.id}
                         isAdmin={this.props.app.user.isAdmin}
                         onDelete={this.onDelete}
-                        onSubscribe={this.onSubscribe}
                         onUnscribe={this.onUnscribe}
                     />
                     {this.renderDeleteModal()}
@@ -61,11 +59,6 @@ class AppointmentList extends Component {
 
     onDelete(id) {
         this.setState({ showDialog: true, selectedEventId: id });
-        console.log('Delete', id);
-    }
-
-    onSubscribe(id) {
-        console.log('Subscribe', id);
     }
 
     onUnscribe(id) {
@@ -86,8 +79,8 @@ class AppointmentList extends Component {
                     <Button.Group>
                         <Button positive icon onClick={() => {
                             this.props.deleteEvent(this.state.selectedEventId).then(res => {
-                                this.setState({showDialog:false});
-                            })
+                                this.setState({showDialog:false, selectedEventId:null});
+                            });
                         }}>
                             <Icon name='checkmark' />
                         </Button>
