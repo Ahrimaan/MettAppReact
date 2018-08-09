@@ -3,7 +3,8 @@ import {
     APPOINTMENT_ADDED, 
     FETCHING_DATA, 
     FETCHED_DATA,
-    APPOINTMENT_DELETED
+    APPOINTMENT_DELETED,
+    JOIN_APPOINTMENT
 } from './action-types';
 import { firestore, auth } from 'firebase';
 import config from '../config';
@@ -49,6 +50,17 @@ export function getAllEvents(selectedTenant) {
             console.log(err);
         });
 
+    }
+}
+
+export function joinAppointment(id,data) {
+    return (dispatch) => {
+        firestore().collection(config.AppointmentCollectionName).doc(id).collection('joiner').add(data).then(result => {
+            console.log(result);
+            dispatch({type: JOIN_APPOINTMENT, payload: Object.assign({},{id:id},data) });
+        }).catch(err => {
+            console.log(err);
+        });
     }
 }
 

@@ -24,6 +24,12 @@ class AppointmentDetail extends React.Component {
         this.setState({ data: {} });
     }
 
+    componentWillReceiveProps(nextProps) {
+        if(nextProps.show) {
+            this.setState({data:{}});
+        }
+    }
+
     render() {
         const { id, date, paypalLink, show, onSaveClick, onCancel } = this.props;
         if (show) {
@@ -48,7 +54,8 @@ class AppointmentDetail extends React.Component {
                             </Form.Field>
                             <Form.Field>
                                 {this.state.data.value &&
-                                    <Button onClick={() => window.open(paypalLink, '_blank')} >
+                                    <Button onClick={
+                                            () => window.open(paypalLink + '/' + this.state.data.value , '_blank')}>
                                         <Icon name='euro' />
                                         PayPal
                                     </Button>
@@ -59,7 +66,7 @@ class AppointmentDetail extends React.Component {
                     <Modal.Actions>
                         <Button.Group>
                             <Button positive icon onClick={() => {
-                                onSaveClick(id);
+                                onSaveClick(id,this.state.data);
                             }}>
                                 <Icon name='checkmark' />
                             </Button>

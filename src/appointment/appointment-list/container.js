@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addApointment, getAllEvents, deleteEvent } from '../actions';
+import { addApointment, getAllEvents, deleteEvent, joinAppointment } from '../actions';
 import { Button, Modal, Icon } from 'semantic-ui-react';
 import CreateAppointmentComponent from '../appointment-create/component';
-import AppointmentDetail from './subscribe-modal';
 import EventItemList from './itemList';
 import { isNullOrUndefined } from 'util';
 
@@ -52,7 +51,7 @@ class AppointmentList extends Component {
                         isAdmin={this.props.app.user.isAdmin}
                         onDelete={this.onDelete}
                         onUnscribe={this.onUnscribe}
-                        onSubscribe={this.openSubscribeDialog}
+                        onSubscribe={(id,data) => this.props.joinAppointment(id,data) }
                     />
                     {this.renderDeleteModal()}
                     {this.renderUnscribeModal()}
@@ -148,4 +147,4 @@ function mapStateToProps(props) {
     return { app: props.app, tenant: props.tenant, appointment: props.appointment };
 }
 
-export default connect(mapStateToProps, { addApointment, getAllEvents, deleteEvent })(AppointmentList);
+export default connect(mapStateToProps, { addApointment, getAllEvents, deleteEvent,joinAppointment })(AppointmentList);
