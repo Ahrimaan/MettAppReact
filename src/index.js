@@ -8,8 +8,7 @@ import { ConnectedRouter } from 'connected-react-router';
 import { initializeApp } from 'firebase/app';
 // Import Components
 import { HeaderComponent } from './headerbar';
-import { LoaderComponent } from './shared';
-import { TenantDialogComponent } from './tenant';
+import { LoaderComponent, ErrorComponent } from './shared';
 
 import config from './config';
 import appRoutes from './appRoutes';
@@ -26,6 +25,7 @@ ReactDOM.render(
         <React.Fragment>
           <LoaderComponent />
           <HeaderComponent />
+          <ErrorComponent />
           <Switch children={appRoutes}>
           </Switch>
         </React.Fragment>

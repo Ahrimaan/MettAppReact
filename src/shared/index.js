@@ -9,3 +9,4 @@ export {
     createUser
  } from './actions';
 export { default as LoaderComponent } from './loaderComponent';
+export { default as ErrorComponent } from './errorMessageComponent';

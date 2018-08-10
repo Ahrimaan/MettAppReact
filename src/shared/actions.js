@@ -26,7 +26,9 @@ export function loginWithCredentials(username, password) {
     return (dispatch) => {
         dispatch({ type: LOADING });
         subscribeUserEvent();
-        auth().signInWithEmailAndPassword(username, password);
+        auth().signInWithEmailAndPassword(username, password).catch(err => {
+            dispatch({type:LOGIN_FAILURE, payload: err})
+        });
     }
 }
 
