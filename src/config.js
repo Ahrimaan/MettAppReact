@@ -14,5 +14,6 @@ export default
         "TenantCollectionName": "tenants",
         "UserCollectionName": "user",
         "AdminCollectionName": "admin",
-        "AppointmentCollectionName": "events"
+        "AppointmentCollectionName": "events",
+        "MemberColectionName":"member"
     }

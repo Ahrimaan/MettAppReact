@@ -22,8 +22,8 @@ export function getAllTenants() {
 export function setUserTenant(tenantid) {
     return new Promise((resolve, reject) => {
         firestore().collection(config.TenantCollectionName).doc(tenantid).get().then(result => {
-            let userData = {displayName: auth().currentUser.displayName , email: auth().currentUser.email};
-            firestore().collection(config.UserCollectionName).doc(user.uid).set({ tenant: result.ref, userData }).then(result => {
+            let userData = {displayName: auth().currentUser.displayName ? auth().currentUser.displayName : auth().currentUser.email, email: auth().currentUser.email};
+            firestore().collection(config.UserCollectionName).doc(auth().currentUser.uid).set({ tenant: result.ref, userData }).then(result => {
                 resolve(tenantid);
             }).catch(err => {
                 reject(err);

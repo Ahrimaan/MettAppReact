@@ -30,6 +30,16 @@ export function loginWithCredentials(username, password) {
     }
 }
 
+export function createUser(username,password) {
+    return (dispatch) => {
+        dispatch({ type: LOADING });
+        subscribeUserEvent();
+        auth().createUserWithEmailAndPassword(username,password).then(result => {
+            console.log(`user created:${result}`);
+        }).catch(err => console.log(err) );
+    }
+}
+
 export function subscribeUserEvent() {
     return (dispatch) => {
         dispatch({ type: LOADING });
@@ -58,8 +68,10 @@ export function getAdminInformation() {
         return new Promise((resolve, reject) => {
             firestore().collection(config.AdminCollectionName).doc(auth().currentUser.uid).get().then(result => {
                 let data = result.data();
-                let paypalLink = data.paypalLink ? data.paypalLink : null;
-                dispatch({ type: USERINFORMATION_FETCHED, payload: { isAdmin: true, paypalLink: paypalLink } });
+                if(data) {
+                    let paypalLink = data ? data.paypalLink ? data.paypalLink : null : null;
+                    dispatch({ type: USERINFORMATION_FETCHED, payload: { isAdmin: true, paypalLink: paypalLink } });
+                }
                 resolve();
             });
         });

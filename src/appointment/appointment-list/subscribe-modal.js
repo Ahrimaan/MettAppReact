@@ -31,7 +31,7 @@ class AppointmentDetail extends React.Component {
     }
 
     render() {
-        const { id, date, paypalLink, show, onSaveClick, onCancel } = this.props;
+        const { id, date, paypalLink, show, onSaveClick, onCancel,hasPaypal } = this.props;
         if (show) {
             return (
                 <Modal
@@ -53,7 +53,7 @@ class AppointmentDetail extends React.Component {
                                         { data: { value: value.value} }) } />
                             </Form.Field>
                             <Form.Field>
-                                {this.state.data.value &&
+                                {(this.state.data.value && hasPaypal) &&
                                     <Button onClick={
                                             () => window.open(paypalLink + '/' + this.state.data.value , '_blank')}>
                                         <Icon name='euro' />

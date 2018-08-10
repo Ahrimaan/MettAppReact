@@ -17,7 +17,7 @@ export default function (state = initialState, action) {
         case LOGGEDIN:{
             if (action.payload) {
                 let user = {};
-                user.displayName = action.payload.displayName;
+                user.displayName = action.payload.displayName ? action.payload.displayName : action.payload.email;
                 user.email = action.payload.email;
                 user.picture = action.payload.photoURL ? action.payload.photoURL : null;
                 user.id =  action.payload.uid;

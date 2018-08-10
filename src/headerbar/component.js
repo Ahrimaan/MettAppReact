@@ -45,6 +45,8 @@ class HeaderComponent extends Component {
                 <Header as='h3'>Mett App</Header>
                 <Menu.Menu position='right'>
                     {this.renderAdminLink()}
+                    <Menu.Item name='Tenant' as={Link}
+                        to='tenant' />
                     {this.props.app.user && (
                         <Menu.Item >
                             <AccountMenu
@@ -55,6 +57,9 @@ class HeaderComponent extends Component {
 
                     {!this.props.app.user && (<Menu.Item name='login' as={Link}
                         to='login' />)
+                    }
+                    {!this.props.app.user && (<Menu.Item name='register' as={Link}
+                        to='login/new' />)
                     }
                     {this.props.app.user && (<Menu.Item name='logout' onClick={this.handleLogoutClick} />)
                     }

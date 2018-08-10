@@ -19,15 +19,13 @@ class AccountMenu extends Component {
     };
 
     render() {
-        const { imageUrl , username } = this.props;
+        const { imageUrl, username } = this.props;
         return (
             <div>
-                <Popup size={ 'mini' } trigger={ <Image avatar src={ imageUrl }/> }>
-                    <Popup.Content>
-                        { username }
-                    </Popup.Content>
-                 </Popup>
-                
+                <div>
+                    <Image src={imageUrl } avatar />
+                    <span>{username}</span>
+                </div>
             </div>
         );
     }

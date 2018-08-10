@@ -20,16 +20,7 @@ export default function (state = initialState, action) {
             return newState;
         }
         case JOIN_APPOINTMENT: {
-            let newState = _.cloneDeep(state);
-            let event = newState.events[action.payload.id];
-
-            let collection = [];
-            if(event.joiner) {
-                collection = event.joiner;
-            }
-            collection.add(action.payload.data);
-            newState.events = collection;
-            return newState;
+            return Object({},state,action.payload);
         }
         case APPOINTMENT_DELETED: {
             let newState = _.cloneDeep(state);

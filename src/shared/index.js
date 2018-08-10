@@ -5,6 +5,7 @@ export {
     loginWithGoogle,
     updateTenantId,
     subscribeUserEvent,
-    getAdminInformation
+    getAdminInformation,
+    createUser
  } from './actions';
 export { default as LoaderComponent } from './loaderComponent';

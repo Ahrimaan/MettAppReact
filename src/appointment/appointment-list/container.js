@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addApointment, getAllEvents, deleteEvent, joinAppointment } from '../actions';
+import { addApointment, getAllEvents, deleteEvent, joinAppointment, leaveAppointment } from '../actions';
 import { Button, Modal, Icon } from 'semantic-ui-react';
 import CreateAppointmentComponent from '../appointment-create/component';
 import EventItemList from './itemList';
@@ -68,7 +68,7 @@ class AppointmentList extends Component {
     }
 
     onUnscribe(id) {
-        console.log('Unscribe', id);
+        this.props.leaveAppointment(id);
     }
 
     openSubscribeDialog = (id) => {
@@ -147,4 +147,4 @@ function mapStateToProps(props) {
     return { app: props.app, tenant: props.tenant, appointment: props.appointment };
 }
 
-export default connect(mapStateToProps, { addApointment, getAllEvents, deleteEvent,joinAppointment })(AppointmentList);
+export default connect(mapStateToProps, { addApointment, getAllEvents, deleteEvent,joinAppointment, leaveAppointment })(AppointmentList);

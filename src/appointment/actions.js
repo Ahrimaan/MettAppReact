@@ -21,7 +21,7 @@ export function addApointment(appointmentData, tenantid) {
                 let data = Object.assign({}, appointmentData,
                      { admin: admin.ref, tenant: tenantid }, adminData);
                 firestore().collection(config.AppointmentCollectionName).add(data).then(result => {
-                    let newData = Object.assign({}, appointmentData, { id: result.id });
+                    let newData = Object.assign({}, appointmentData, { id: result.id },adminData);
                     resolve(newData);
                     dispatch({ type: APPOINTMENT_ADDED, payload: newData });
                 }).catch(err => {
@@ -38,8 +38,9 @@ export function getAllEvents(selectedTenant) {
         firestore().collection(config.TenantCollectionName).doc(selectedTenant).get().then(tenant => {
             firestore().collection(config.AppointmentCollectionName).where('tenant', '==', tenant.id).get().then(
                 events => {
+                    let sorted = events.docs.sort(((item1,item2) => new Date(item1.data().date).getDate() > new Date(item2.data().date).getDate() ));
                     dispatch({ type: FETCHED_DATA,
-                         payload: events.docs.map(
+                         payload: sorted.map(
                              event => Object.assign({},event.data(),
                               {id: event.id }))});
                 }
@@ -49,19 +50,46 @@ export function getAllEvents(selectedTenant) {
         }).catch(err => {
             console.log(err);
         });
-
     }
 }
 
 export function joinAppointment(id,data) {
     return (dispatch) => {
-        firestore().collection(config.AppointmentCollectionName).doc(id).collection('joiner').add(data).then(result => {
-            result.get().then(refResult => {
-                dispatch({type: JOIN_APPOINTMENT, payload: {id:id, data: refResult.data() } });
-            })         
-        }).catch(err => {
-            console.log(err);
-        });
+        let docRef = firestore().collection(config.AppointmentCollectionName).doc(id);
+        docRef.get().then(result => {
+            let events = result.data().attendees;
+            data.username = auth().currentUser.displayName;
+            data.email = auth().currentUser.email;
+            data.uid = auth().currentUser.uid;
+            if(!events) {
+                events = [data];
+            } else {
+                events.push(data);
+            }
+            docRef.update({
+                attendees : events
+            }).then(updateResult => {
+                dispatch({type: JOIN_APPOINTMENT, payload:events});
+            }).catch(err => {
+                console.log(err);
+            })          
+        })
+    }
+}
+
+export function leaveAppointment(id) {
+    return (dispatch) => {
+        let docRef = firestore().collection(config.AppointmentCollectionName).doc(id);
+        docRef.get().then(result => {
+            let events = result.data().attendees.filter(item => item.uid !== auth().currentUser.uid);
+            docRef.update({
+                attendees : events
+            }).then(updateResult => {
+                dispatch({type: JOIN_APPOINTMENT, payload:events});
+            }).catch(err => {
+                console.log(err);
+            })          
+        })
     }
 }
 

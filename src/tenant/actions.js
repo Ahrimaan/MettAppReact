@@ -20,7 +20,7 @@ export function updateTenant(tenantid) {
         dispatch({ type: LOADING });
         setUserTenant(tenantid).then(result => {
             dispatch({ type: TENANT_SET, payload: result });
-            dispatch(push('/'));
+            dispatch(push('/home'));
         }).catch(error => {
             console.log(error);
         })
