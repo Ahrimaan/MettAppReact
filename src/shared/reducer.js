@@ -5,7 +5,8 @@ import {
     LOGIN_COMPLETED,
     USERINFORMATION_FETCHED,
     HIDE_LOADER,
-    SHOW_LOADER
+    SHOW_LOADER,
+    LOGIN_FAILURE
 } from './actionTypes';
 
 import _ from 'lodash';
@@ -36,6 +37,9 @@ export default function (state = initialState, action) {
         }
         case LOADING: {
             return Object.assign({}, { loading: true });
+        }
+        case LOGIN_FAILURE:{
+            return Object.assign({},state, { loading: false, error: action.payload });
         }
         case LOGOUT: {
             return initialState;

@@ -16,9 +16,16 @@ class LoginFormComponent extends Component {
                         <Form success>
                             <Form.Input name='username' value={this.state.username} onChange={this.handleChange}  label='Email' placeholder='your@mail.com' />
                             <Form.Input name='password' value={this.state.password} onChange={this.handleChange} type='password' label='Password' placeholder='your password' />
-                            {this.props.error && <Message error header='Error' content={this.props.error} />}
+                            {this.state.error && <Message error header='Error' content={this.state.error} />}
 
-                            <Button onClick={ () => this.props.createUser(this.state.username, this.state.password) } >Login</Button>
+                            <Button onClick={ () =>
+                                {
+                                    if(this.state.password.length > 7) {
+                                        this.props.createUser(this.state.username, this.state.password)
+                                    } else {
+                                        this.setState({ error : ' you must enter a minimum password of 7 chars'});
+                                    }         
+                                }  } >Create User</Button>
                         </Form>
                         
 

@@ -38,8 +38,8 @@ export function setUserTenant(tenantid) {
 
 export function getUserTenant(userID){
     return new Promise((resolve, reject) => {
-        firestore().collection(config.AdminCollectionName).doc(userID).get().then(result => {
-            resolve(result.data().tenantId.id)
+        firestore().collection(config.AdminCollectionName).doc(userID).get().then(adminResult => {
+            resolve(adminResult.data().tenantId.id)
         }).catch(adminErr => {
             firestore().collection(config.UserCollectionName).doc(userID).get().then(result => {
                 resolve(result.data().tenant.id);

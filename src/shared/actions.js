@@ -36,6 +36,7 @@ export function createUser(username,password) {
         subscribeUserEvent();
         auth().createUserWithEmailAndPassword(username,password).then(result => {
             console.log(`user created:${result}`);
+            auth().signOut();
         }).catch(err => console.log(err) );
     }
 }
@@ -45,14 +46,19 @@ export function subscribeUserEvent() {
         dispatch({ type: LOADING });
         auth().onAuthStateChanged(result => {
             if (result) {
-                dispatch({ type: LOGGEDIN, payload: result });
-                Promise.all([
-                    dispatch(fetchUserTenant(result.uid)),
-                    dispatch(getAdminInformation())
-                ]).then(res => {
-                    dispatch({type: LOGIN_COMPLETED});
-                    dispatch(push('/home'));
-                });
+                if(result.emailVerified) {
+                    dispatch({ type: LOGGEDIN, payload: result });
+                    Promise.all([
+                        dispatch(fetchUserTenant(result.uid)),
+                        dispatch(getAdminInformation())
+                    ]).then(res => {
+                        dispatch({type: LOGIN_COMPLETED});
+                        dispatch(push('/home'));
+                    });
+                }
+                else {
+                    dispatch({type: LOGIN_FAILURE, payload:'your user is not activated, please wait for the activation mail'});
+                }
             } else {
                 dispatch({ type: LOGOUT });
                 dispatch(push('/login'));
