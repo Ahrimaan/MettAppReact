@@ -35,9 +35,6 @@ export default function (state = initialState, action) {
         case LOGIN_COMPLETED: {
             return Object.assign({},state, { loading: false });
         }
-        case LOADING: {
-            return Object.assign({}, { loading: true });
-        }
         case LOGIN_FAILURE:{
             return Object.assign({},state, { loading: false, error: action.payload });
         }
