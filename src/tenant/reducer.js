@@ -11,9 +11,6 @@ export default function (state = initialState, action) {
         case TENANT_SET: {
             return Object.assign({}, state, { selectedTenant: action.payload, loading: false })
         }
-        case LOADING: {
-            return Object.assign({}, state, { loading:true });
-        }
         default:
             return state
     }
