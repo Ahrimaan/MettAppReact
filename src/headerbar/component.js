@@ -23,13 +23,22 @@ class HeaderComponent extends Component {
         .logoutCurrentUser();
 
     renderAdminLink() {
-            if (this.props.app.user &&this.props.app.user.isAdmin) {
-                return (
-                    <Menu.Item name='Admin' as={Link} to='/admin' >
+        if (this.props.app.user && this.props.app.user.isAdmin) {
+            return (
+                <Menu.Item name='Admin' as={Link} to='/admin' >
 
-                    </Menu.Item>
-                );
-            }
+                </Menu.Item>
+            );
+        }
+    }
+
+    renderTenantLink() {
+        if (this.props.app.user && !this.props.app.user.isAdmin) {
+            return (<Menu.Item name='Tenant' as={Link}
+                to='tenant' >
+            </Menu.Item>
+            )
+        }
     }
 
     render() {
@@ -41,15 +50,11 @@ class HeaderComponent extends Component {
                     as={Link}
                     to='/home'
                     name='home'
-                    active={activeItem === 'home'}/>
+                    active={activeItem === 'home'} />
                 <Header as='h3'>Mett App</Header>
                 <Menu.Menu position='right'>
                     {this.renderAdminLink()}
-                    {this.props.app.user && (
-                        <Menu.Item name='Tenant' as={Link}
-                        to='tenant' />
-                    )}
-                    
+                    {this.renderTenantLink()}
                     {this.props.app.user && (
                         <Menu.Item >
                             <AccountMenu

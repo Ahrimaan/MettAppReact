@@ -3,6 +3,7 @@ export {
     logoutCurrentUser,
     loginWithCredentials,
     loginWithGoogle,
+    loginWithGithub,
     updateTenantId,
     subscribeUserEvent,
     getAdminInformation,

@@ -32,4 +32,4 @@ ReactDOM.render(
       </ConnectedRouter>
     </Container>
   </Provider>
-  , document.querySelector('.application'));
+  , document.getElementById("app"));

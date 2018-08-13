@@ -4,10 +4,7 @@ import {
     LOGIN_COMPLETED,
     LOGOUT,
     USERINFORMATION_FETCHED,
-    LOADING,
-    SHOW_LOADER,
-    HIDE_LOADER
-
+    LOADING
 } from './actionTypes';
 import { push } from 'connected-react-router';
 import { auth, firestore } from 'firebase';
@@ -22,24 +19,33 @@ export function loginWithGoogle() {
     }
 }
 
+export function loginWithGithub() {
+    return (dispatch) => {
+        dispatch({ type: LOADING });
+        subscribeUserEvent();
+        auth().signInWithPopup(new auth.GithubAuthProvider());
+    }
+}
+
 export function loginWithCredentials(username, password) {
     return (dispatch) => {
         dispatch({ type: LOADING });
         subscribeUserEvent();
         auth().signInWithEmailAndPassword(username, password).catch(err => {
-            dispatch({type:LOGIN_FAILURE, payload: err})
+            dispatch({ type: LOGIN_FAILURE, payload: err })
         });
     }
 }
 
-export function createUser(username,password) {
+export function createUser(username, password) {
     return (dispatch) => {
         dispatch({ type: LOADING });
         subscribeUserEvent();
-        auth().createUserWithEmailAndPassword(username,password).then(result => {
+        auth().createUserWithEmailAndPassword(username, password).then(result => {
+            auth().currentUser.sendEmailVerification();
             console.log(`user created:${result}`);
             auth().signOut();
-        }).catch(err => console.log(err) );
+        }).catch(err => console.log(err));
     }
 }
 
@@ -48,18 +54,18 @@ export function subscribeUserEvent() {
         dispatch({ type: LOADING });
         auth().onAuthStateChanged(result => {
             if (result) {
-                if(result.emailVerified) {
+                if (result.emailVerified) {
                     dispatch({ type: LOGGEDIN, payload: result });
                     Promise.all([
                         dispatch(fetchUserTenant(result.uid)),
                         dispatch(getAdminInformation())
                     ]).then(res => {
-                        dispatch({type: LOGIN_COMPLETED});
+                        dispatch({ type: LOGIN_COMPLETED });
                         dispatch(push('/home'));
                     });
                 }
                 else {
-                    dispatch({type: LOGIN_FAILURE, payload:'your user is not activated, please wait for the activation mail'});
+                    dispatch({ type: LOGIN_FAILURE, payload: 'your user is not activated, please wait for the activation mail' });
                 }
             } else {
                 dispatch({ type: LOGOUT });
@@ -76,7 +82,7 @@ export function getAdminInformation() {
         return new Promise((resolve, reject) => {
             firestore().collection(config.AdminCollectionName).doc(auth().currentUser.uid).get().then(result => {
                 let data = result.data();
-                if(data) {
+                if (data) {
                     let paypalLink = data ? data.paypalLink ? data.paypalLink : null : null;
                     dispatch({ type: USERINFORMATION_FETCHED, payload: { isAdmin: true, paypalLink: paypalLink } });
                 }
