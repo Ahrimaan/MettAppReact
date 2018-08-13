@@ -42,7 +42,7 @@ export function createUser(username, password) {
         dispatch({ type: LOADING });
         subscribeUserEvent();
         auth().createUserWithEmailAndPassword(username, password).then(result => {
-            auth().currentUser.sendEmailVerification();
+            auth().currentUser.sendEmailVerification({url:"http://chaosmett1.s3-website.eu-central-1.amazonaws.com"});
             console.log(`user created:${result}`);
             auth().signOut();
         }).catch(err => console.log(err));
