@@ -1,5 +1,6 @@
 import React from 'react';
-import { Grid, Card, Button } from 'semantic-ui-react';
+import { Grid, Card, Button, Icon } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 import AppointmentDetail from './subscribe-modal';
 import moment from 'moment';
 moment.locale('de');
@@ -13,7 +14,7 @@ class EventList extends React.Component {
     }
 
     isActive(date) {
-        return  new Date(date).getDate() >= new Date().getDate();
+        return new Date(date).getDate() >= new Date().getDate();
     }
 
     render() {
@@ -31,8 +32,20 @@ class EventList extends React.Component {
                                 <Grid.Column>
                                     <Card>
                                         <Card.Content>
-                                            <Card.Header>Event at</Card.Header>
-                                            <Card.Meta> {moment(item.date).format('LL')} </Card.Meta>
+                                            <Card.Header>
+                                                <Grid>
+                                                    <Grid.Column width={12}>Event at</Grid.Column>
+                                                    <Grid.Column width={4}>
+                                                        {isAdmin && (
+                                                            <Button circular icon color="blue" as={Link} to={"/admin/event/" + item.id }  >
+                                                                <Icon name='info circle' />
+                                                            </Button>
+                                                        )}
+                                                    </Grid.Column>
+                                                </Grid>
+                                            </Card.Header>
+                                            <Card.Header> </Card.Header>
+                                            <Card.Meta> {moment(item.date).format('LL')}  </Card.Meta>
                                             <Card.Description>
                                                 There are {item.attendees ? item.attendees.length : 0} Persons subscribed
                                                 </Card.Description>
@@ -40,7 +53,7 @@ class EventList extends React.Component {
                                         <Card.Content extra>
                                             <div className='ui two buttons'>
                                                 {(!isSubscribed && active) && (
-                                                    <Button basic color='green' onClick={() => this.setState({ show:true }) }>
+                                                    <Button basic color='green' onClick={() => this.setState({ show: true })}>
                                                         Subscribe
                                                         </Button>)
                                                 }
@@ -54,15 +67,16 @@ class EventList extends React.Component {
                                                         basic color='red' onClick={() => onDelete(item.id)}>
                                                         Delete
                                                     </Button>)}
+
                                             </div>
                                             <AppointmentDetail
                                                 id={item.id}
                                                 hasPaypal={item.allowPaypal}
                                                 show={this.state.show}
                                                 onCancel={() => this.setState({ show: false })}
-                                                onSaveClick={(id,data) => {
-                                                    onSubscribe(id,data);
-                                                    this.setState({show:false});
+                                                onSaveClick={(id, data) => {
+                                                    onSubscribe(id, data);
+                                                    this.setState({ show: false });
                                                 }}
                                                 paypalLink={item.link}
                                             />

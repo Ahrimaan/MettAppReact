@@ -25,7 +25,7 @@ class HeaderComponent extends Component {
     renderAdminLink() {
         if (this.props.app.user && this.props.app.user.isAdmin) {
             return (
-                <Menu.Item name='Admin' as={Link} to='/admin' >
+                <Menu.Item name='Admin' as={Link} to='/admin/paypal' >
 
                 </Menu.Item>
             );
