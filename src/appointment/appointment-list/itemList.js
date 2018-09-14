@@ -16,7 +16,6 @@ class EventList extends React.Component {
     isActive(date) {
         return new Date(date).getDate() >= new Date().getDate();
     }
-
     render() {
         const { items, userid, isAdmin, onUnscribe, onDelete, onSubscribe } = this.props;
         if (items) {
@@ -73,6 +72,7 @@ class EventList extends React.Component {
                                                 id={item.id}
                                                 hasPaypal={item.allowPaypal}
                                                 show={this.state.show}
+                                                date={moment(item.date).format('LL')}
                                                 onCancel={() => this.setState({ show: false })}
                                                 onSaveClick={(id, data) => {
                                                     onSubscribe(id, data);

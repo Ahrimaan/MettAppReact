@@ -40,7 +40,7 @@ class AppointmentDetail extends React.Component {
                     size='mini'
                     open={show}>
                     <Modal.Header>
-                        Subscribe to Event at {moment(date).format('LL')}
+                        Subscribe to Event at {date}
                     </Modal.Header>
                     <Modal.Content>
                         <Form>
