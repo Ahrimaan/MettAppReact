@@ -15,7 +15,7 @@ export function addApointment(appointmentData, tenantid) {
         return new Promise((resolve, reject) => {
             firestore().collection(config.AdminCollectionName).doc(auth().currentUser.uid).get().then(admin => {
                 let adminData = { 
-                    link:admin.data().paypalLink,
+                    link:admin.data().paypalLink ? admin.data().paypalLink : '',
                     name:admin.data().displayName,
                     created: new Date() };
                 let data = Object.assign({}, appointmentData,
