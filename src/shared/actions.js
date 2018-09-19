@@ -54,8 +54,7 @@ export function subscribeUserEvent() {
         dispatch({ type: LOADING });
         auth().onAuthStateChanged(result => {
             if (result) {
-                if (result.emailVerified) {
-                    dispatch({ type: LOGGEDIN, payload: result });
+                dispatch({ type: LOGGEDIN, payload: result });
                     Promise.all([
                         dispatch(fetchUserTenant(result.uid)),
                         dispatch(getAdminInformation())
@@ -63,10 +62,6 @@ export function subscribeUserEvent() {
                         dispatch({ type: LOGIN_COMPLETED });
                         dispatch(push('/home'));
                     });
-                }
-                else {
-                    dispatch({ type: LOGIN_FAILURE, payload: 'your user is not activated, please wait for the activation mail' });
-                }
             } else {
                 dispatch({ type: LOGOUT });
                 dispatch(push('/login'));
